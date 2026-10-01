@@ -1,0 +1,180 @@
+package main
+
+templ Page(v ViewData) {
+	<!DOCTYPE html>
+	<html lang="en">
+		<head>
+			<meta charset="utf-8"/>
+			<meta name="viewport" content="width=device-width, initial-scale=1"/>
+			<title>Chain analyzer</title>
+			<style>
+				:root {
+					--bg:#ffffff; --fg:#111111; --block:#f8f9fa; --line:#d0d4dc;
+					--head:#1e293b; --head-fg:#ffffff; --accent:#1d4ed8;
+					--ok:#0a7a32; --bad:#b00020;
+				}
+				@media (prefers-color-scheme: dark) {
+					:root {
+						--bg:#101114; --fg:#f2f2f2; --block:#1b1d22; --line:#333842;
+						--head:#2d3139; --head-fg:#f2f2f2; --accent:#5b8cff;
+						--ok:#4cd07d; --bad:#ff6b6b;
+					}
+				}
+				* { box-sizing:border-box; border-radius:0; }
+				body { margin:0; background:var(--bg); color:var(--fg); font:15px/1.5 system-ui,sans-serif; }
+				main { max-width:980px; margin:0 auto; padding:16px; }
+				h1 { margin:0 0 12px; font-size:22px; text-transform:uppercase; letter-spacing:1px; }
+				h2 { margin:24px 0 8px; font-size:16px; text-transform:uppercase; letter-spacing:1px;
+					background:var(--head); color:var(--head-fg); padding:6px 10px; }
+
+				form { background:var(--block); border:1px solid var(--line); padding:12px; display:grid; gap:10px; }
+				label { display:grid; gap:4px; font-weight:700; font-size:12px; text-transform:uppercase; }
+				input, select, textarea {
+					font:inherit; padding:8px; border:1px solid var(--line);
+					background:var(--bg); color:var(--fg); width:100%;
+				}
+				.row { display:grid; grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); gap:10px; }
+				button {
+					font:inherit; font-weight:700; text-transform:uppercase; letter-spacing:1px;
+					padding:12px; border:1px solid var(--line); background:var(--accent);
+					color:#fff; cursor:pointer;
+				}
+				button:hover { background:var(--head); color:var(--head-fg); }
+
+				.err { background:var(--bad); color:#fff; padding:10px; border:1px solid var(--line); font-weight:700; }
+
+				.table-wrap { overflow-x:auto; }
+				table { width:100%; border-collapse:collapse; font-size:14px; border:1px solid var(--line); }
+				th { background:var(--head); color:var(--head-fg); text-align:left; padding:6px 8px; text-transform:uppercase; font-size:12px; }
+				td { padding:6px 8px; border-top:1px solid var(--line); vertical-align:top; }
+				.out { display:inline-block; margin:0 6px 4px 0; padding:2px 8px; background:var(--block); border:1px solid var(--line); }
+
+				.plan { border:1px solid var(--line); margin:14px 0; background:var(--block); }
+				.plan h3 { margin:0; padding:8px 10px; font-size:15px; background:var(--accent); color:#fff; }
+				.stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); }
+				.stat { padding:8px 10px; border-right:1px solid var(--line); border-bottom:1px solid var(--line); }
+				.stat b { display:block; font-size:11px; text-transform:uppercase; opacity:.8; }
+				.stat span { font-size:18px; font-weight:700; }
+				.plan .table-wrap { padding:0; }
+				.plan table { border:0; }
+
+				.win { color:var(--ok); font-weight:700; }
+				.loss { color:var(--bad); font-weight:700; }
+				.note { font-size:12px; opacity:.8; border-left:4px solid var(--line); padding-left:10px; margin-top:20px; }
+			</style>
+		</head>
+		<body>
+			<main>
+				<h1>Chain analyzer</h1>
+				<form method="post" action="/analyze" id="f">
+<label>
+	Paste page HTML or JSON (saved in your browser)
+	<textarea name="html" rows="6" placeholder={ `{"bet_name":"ufc 332","bet":1,"groups":[[{"name":"A","odd":2.1},{"name":"B","odd":1.7}]]}` }>{ v.HTML }</textarea>
+</label>
+					<div class="row">
+						<label>
+							Mode
+							<select name="mode">
+								<option value="best" selected?={ v.Mode == "best" }>best (low risk)</option>
+								<option value="big" selected?={ v.Mode == "big" }>big (big win)</option>
+								<option value="chain" selected?={ v.Mode == "chain" }>chain (best weakest win)</option>
+							</select>
+						</label>
+						<label>Fights per chain (k)<input type="number" name="k" min="1" max="7" value={ v.K }/></label>
+						<label>Combos to bet (m)<input type="number" name="m" min="1" value={ v.M }/></label>
+						<label>Show top<input type="number" name="top" min="1" max="100" value={ v.Top }/></label>
+						<label>Bet $ per combo<input type="number" name="bet" min="0.01" step="0.01" value={ v.Bet }/></label>
+					</div>
+					<button type="submit">Analyze</button>
+				</form>
+				if v.Error != "" {
+					<p class="err">{ v.Error }</p>
+				}
+				if v.Done {
+					<h2>{ v.EventName }</h2>
+					<div class="table-wrap">
+						<table>
+							<thead>
+								<tr>
+									<th>#</th>
+									<th>Outcomes (name · odd · fair)</th>
+									<th>Margin</th>
+								</tr>
+							</thead>
+							<tbody>
+								for _, f := range v.Fights {
+									<tr>
+										<td>{ f.N }</td>
+										<td>
+											for _, o := range f.Outcomes {
+												<span class="out">{ o.Name } · { o.Odd } · { o.Fair }</span>
+											}
+										</td>
+										<td>{ f.Margin }</td>
+									</tr>
+								}
+							</tbody>
+						</table>
+					</div>
+					<h2>Results</h2>
+					for _, p := range v.Plans {
+						<section class="plan">
+							<h3>{ p.Title }</h3>
+							<div class="stats">
+								<div class="stat"><b>Profit</b><span class="win">{ p.Profit }</span></div>
+								<div class="stat"><b>Win but loss</b><span>{ p.Partial }</span></div>
+								<div class="stat"><b>Lose all</b><span class="loss">{ p.Lose }</span></div>
+								<div class="stat"><b>Expected</b><span>{ p.Exp }</span></div>
+							</div>
+							<div class="table-wrap">
+								<table>
+									<thead>
+										<tr>
+											<th>Combo</th>
+											<th>Odd</th>
+											<th>Chance</th>
+											<th>Price</th>
+											<th>Net</th>
+										</tr>
+									</thead>
+									<tbody>
+										for _, r := range p.Rows {
+											<tr>
+												<td>{ r.Name }</td>
+												<td>{ r.Odd }</td>
+												<td>{ r.Win }</td>
+												<td>{ r.Price }</td>
+												<td class={ r.Class }>{ r.Net }</td>
+											</tr>
+										}
+									</tbody>
+								</table>
+							</div>
+						</section>
+					}
+					<p class="note">Chances use odds with the bookmaker margin removed, so they are estimates. Expected return stays under 100%, so no plan is a guaranteed win.</p>
+				}
+			</main>
+			<script>
+				(function () {
+					var KEY = "ufcbet:v1";
+					var f = document.getElementById("f");
+					var names = ["html", "mode", "k", "m", "top", "bet"];
+					try {
+						var s = JSON.parse(localStorage.getItem(KEY) || "{}");
+						names.forEach(function (n) {
+							if (f.elements[n] && s[n]) f.elements[n].value = s[n];
+						});
+					} catch (e) {}
+					f.addEventListener("submit", function () {
+						try {
+							var s = {};
+							names.forEach(function (n) { s[n] = f.elements[n].value; });
+							localStorage.setItem(KEY, JSON.stringify(s));
+						} catch (e) {}
+					});
+				})();
+			</script>
+		</body>
+	</html>
+}
