@@ -6,7 +6,7 @@ templ Page(v ViewData) {
 		<head>
 			<meta charset="utf-8"/>
 			<meta name="viewport" content="width=device-width, initial-scale=1"/>
-			<title>Chain analyzer</title>
+			<title>Odds Chain Analyzer</title>
 			<style>
 				:root {
 					--bg:#ffffff; --fg:#111111; --block:#f8f9fa; --line:#d0d4dc;
@@ -18,7 +18,7 @@ templ Page(v ViewData) {
 						--bg:#101114; --fg:#f2f2f2; --block:#1b1d22; --line:#333842;
 						--head:#2d3139; --head-fg:#f2f2f2; --accent:#5b8cff;
 						--ok:#4cd07d; --bad:#ff6b6b;
-					}
+			1		}
 				}
 				* { box-sizing:border-box; border-radius:0; }
 				body { margin:0; background:var(--bg); color:var(--fg); font:15px/1.5 system-ui,sans-serif; }
@@ -61,16 +61,54 @@ templ Page(v ViewData) {
 				.win { color:var(--ok); font-weight:700; }
 				.loss { color:var(--bad); font-weight:700; }
 				.note { font-size:12px; opacity:.8; border-left:4px solid var(--line); padding-left:10px; margin-top:20px; }
+
+				/* ===== added: Paste / Build tabs ===== */
+				.bb-tabs { display:flex; gap:0; margin-bottom:8px; }
+				.bb-tab {
+					padding:8px 16px; background:var(--bg); color:var(--fg);
+					border:1px solid var(--line); font-size:12px;
+				}
+				.bb-tab.active { background:var(--head); color:var(--head-fg); }
+				.bb-tab.active:hover { background:var(--head); color:var(--head-fg); }
+				.bb-row { display:grid; grid-template-columns:1fr 120px; gap:8px; margin-bottom:8px; }
+				.bb-group { border:1px solid var(--line); background:var(--bg); padding:8px; margin-bottom:8px; }
+				.bb-group-head {
+					display:flex; justify-content:space-between; align-items:center;
+					font-size:12px; font-weight:700; text-transform:uppercase; margin-bottom:6px;
+				}
+				.bb-team { display:grid; grid-template-columns:1fr 110px 40px; gap:6px; margin-bottom:6px; }
+				.bb-small { padding:6px 10px; font-size:11px; letter-spacing:0; }
+				.bb-x { padding:6px 0; background:var(--bad); }
+				.bb-msg { color:var(--bad); font-size:12px; font-weight:700; margin:6px 0 0; min-height:1em; }
+				.bb-panel-build { display:block; }
+				.bb-panel-build[hidden], [data-panel][hidden] { display:none; }
 			</style>
 		</head>
 		<body>
 			<main>
 				<h1>Chain analyzer</h1>
 				<form method="post" action="/analyze" id="f">
+					<div class="bet-input">
+						<div class="bb-tabs">
+							<button type="button" class="bb-tab active" data-tab="paste">Paste</button>
+							<button type="button" class="bb-tab" data-tab="build">Build</button>
+						</div>
+						<div data-panel="paste">
 <label>
 	Paste page HTML or JSON (saved in your browser)
 	<textarea name="html" rows="6" placeholder={ `{"bet_name":"ufc 332","bet":1,"groups":[[{"name":"A","odd":2.1},{"name":"B","odd":1.7}]]}` }>{ v.HTML }</textarea>
 </label>
+						</div>
+						<div data-panel="build" class="bb-panel-build" hidden>
+							<div class="bb-row">
+								<input id="bb-name" type="text" placeholder="Bet name (e.g. football 4-oct)"/>
+								<input id="bb-stake" type="number" min="0" step="any" value="1" title="Stake"/>
+							</div>
+							<div id="bb-groups"></div>
+							<button type="button" class="bb-small" id="bb-add-group">+ Add group</button>
+							<p id="bb-msg" class="bb-msg"></p>
+						</div>
+					</div>
 					<div class="row">
 						<label>
 							Mode
@@ -97,7 +135,7 @@ templ Page(v ViewData) {
 							<thead>
 								<tr>
 									<th>#</th>
-									<th>Outcomes (name · odd · fair)</th>
+									<th>Outcomes (name � odd � fair)</th>
 									<th>Margin</th>
 								</tr>
 							</thead>
@@ -107,7 +145,7 @@ templ Page(v ViewData) {
 										<td>{ f.N }</td>
 										<td>
 											for _, o := range f.Outcomes {
-												<span class="out">{ o.Name } · { o.Odd } · { o.Fair }</span>
+												<span class="out">{ o.Name } � { o.Odd } � { o.Fair }</span>
 											}
 										</td>
 										<td>{ f.Margin }</td>
@@ -172,6 +210,153 @@ templ Page(v ViewData) {
 							names.forEach(function (n) { s[n] = f.elements[n].value; });
 							localStorage.setItem(KEY, JSON.stringify(s));
 						} catch (e) {}
+					});
+				})();
+			</script>
+			<script>
+				/* ===== added: Paste / Build tabs ===== */
+				(function () {
+					var f = document.getElementById("f");
+					var ta = f.elements["html"];
+					var nameEl = document.getElementById("bb-name");
+					var stakeEl = document.getElementById("bb-stake");
+					var groupsEl = document.getElementById("bb-groups");
+					var msgEl = document.getElementById("bb-msg");
+					var tabs = document.querySelectorAll(".bb-tab");
+					var panels = document.querySelectorAll("[data-panel]");
+
+					var state = { bet_name: "", bet: 1, groups: [] };
+
+					function emptyTeam() { return { name: "", odd: "" }; }
+					function emptyGroup() { return [emptyTeam(), emptyTeam()]; }
+
+					function showTab(tab) {
+						tabs.forEach(function (t) { t.classList.toggle("active", t.dataset.tab === tab); });
+						panels.forEach(function (p) { p.hidden = p.dataset.panel !== tab; });
+						if (tab === "build") loadFromTextarea();
+					}
+
+					function loadFromTextarea() {
+						msgEl.textContent = "";
+						var raw = ta.value.trim();
+						state = { bet_name: "", bet: 1, groups: [] };
+						if (raw) {
+							try {
+								var j = JSON.parse(raw);
+								state.bet_name = j.bet_name || "";
+								state.bet = (j.bet !== undefined && j.bet !== null) ? j.bet : 1;
+								state.groups = (j.groups || []).map(function (g) {
+									return g.map(function (t) {
+										return {
+											name: (t.name !== undefined && t.name !== null) ? t.name : "",
+											odd: (t.odd !== undefined && t.odd !== null) ? t.odd : ""
+										};
+									});
+								});
+							} catch (e) {
+								msgEl.textContent = "Textarea is not valid JSON (maybe pasted HTML). Starting with an empty form.";
+							}
+						}
+						if (!state.groups.length) state.groups = [emptyGroup()];
+						nameEl.value = state.bet_name;
+						stakeEl.value = state.bet;
+						render();
+					}
+
+					function sync() {
+						state.bet_name = nameEl.value;
+						state.bet = parseFloat(stakeEl.value) || 0;
+						var out = {
+							bet_name: state.bet_name,
+							bet: state.bet,
+							groups: state.groups
+								.map(function (g) {
+									return g
+										.filter(function (t) {
+											return String(t.name).trim() !== "" && t.odd !== "" && !isNaN(parseFloat(t.odd));
+										})
+										.map(function (t) {
+											return { name: String(t.name).trim(), odd: parseFloat(t.odd) };
+										});
+								})
+								.filter(function (g) { return g.length; })
+						};
+						ta.value = JSON.stringify(out, null, 2);
+						ta.dispatchEvent(new Event("input", { bubbles: true }));
+					}
+
+					function render() {
+						groupsEl.innerHTML = "";
+						state.groups.forEach(function (group, gi) {
+							var box = document.createElement("div");
+							box.className = "bb-group";
+
+							var head = document.createElement("div");
+							head.className = "bb-group-head";
+							var title = document.createElement("span");
+							title.textContent = "Group " + (gi + 1);
+							var rmGroup = document.createElement("button");
+							rmGroup.type = "button";
+							rmGroup.className = "bb-small";
+							rmGroup.textContent = "Remove group";
+							rmGroup.onclick = function () { state.groups.splice(gi, 1); render(); sync(); };
+							head.appendChild(title);
+							head.appendChild(rmGroup);
+							box.appendChild(head);
+
+							group.forEach(function (team, ti) {
+								var row = document.createElement("div");
+								row.className = "bb-team";
+
+								var n = document.createElement("input");
+								n.type = "text";
+								n.placeholder = "Team name";
+								n.value = team.name;
+								n.oninput = function () { team.name = n.value; sync(); };
+
+								var o = document.createElement("input");
+								o.type = "number";
+								o.step = "any";
+								o.placeholder = "Odd";
+								o.value = team.odd;
+								o.oninput = function () { team.odd = o.value; sync(); };
+
+								var x = document.createElement("button");
+								x.type = "button";
+								x.className = "bb-small bb-x";
+								x.textContent = "\u2715";
+								x.onclick = function () { group.splice(ti, 1); render(); sync(); };
+
+								row.appendChild(n);
+								row.appendChild(o);
+								row.appendChild(x);
+								box.appendChild(row);
+							});
+
+							var addTeam = document.createElement("button");
+							addTeam.type = "button";
+							addTeam.className = "bb-small";
+							addTeam.textContent = "+ Add team";
+							addTeam.onclick = function () { group.push(emptyTeam()); render(); };
+							box.appendChild(addTeam);
+
+							groupsEl.appendChild(box);
+						});
+					}
+
+					tabs.forEach(function (t) {
+						t.addEventListener("click", function () { showTab(t.dataset.tab); });
+					});
+					document.getElementById("bb-add-group").onclick = function () {
+						state.groups.push(emptyGroup());
+						render();
+					};
+					nameEl.addEventListener("input", sync);
+					stakeEl.addEventListener("input", sync);
+
+					// Enter inside the Build form should not submit the whole form
+					document.querySelector('[data-panel="build"]').addEventListener("keydown", function (e) {
+						if (e.key === "Enter") e.preventDefault();
 					});
 				})();
 			</script>

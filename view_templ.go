@@ -29,14 +29,14 @@ func Page(v ViewData) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<!doctype html><html lang=\"en\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><title>Chain analyzer</title><style>\n\t\t\t\t:root {\n\t\t\t\t\t--bg:#ffffff; --fg:#111111; --block:#f8f9fa; --line:#d0d4dc;\n\t\t\t\t\t--head:#1e293b; --head-fg:#ffffff; --accent:#1d4ed8;\n\t\t\t\t\t--ok:#0a7a32; --bad:#b00020;\n\t\t\t\t}\n\t\t\t\t@media (prefers-color-scheme: dark) {\n\t\t\t\t\t:root {\n\t\t\t\t\t\t--bg:#101114; --fg:#f2f2f2; --block:#1b1d22; --line:#333842;\n\t\t\t\t\t\t--head:#2d3139; --head-fg:#f2f2f2; --accent:#5b8cff;\n\t\t\t\t\t\t--ok:#4cd07d; --bad:#ff6b6b;\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t\t* { box-sizing:border-box; border-radius:0; }\n\t\t\t\tbody { margin:0; background:var(--bg); color:var(--fg); font:15px/1.5 system-ui,sans-serif; }\n\t\t\t\tmain { max-width:980px; margin:0 auto; padding:16px; }\n\t\t\t\th1 { margin:0 0 12px; font-size:22px; text-transform:uppercase; letter-spacing:1px; }\n\t\t\t\th2 { margin:24px 0 8px; font-size:16px; text-transform:uppercase; letter-spacing:1px;\n\t\t\t\t\tbackground:var(--head); color:var(--head-fg); padding:6px 10px; }\n\n\t\t\t\tform { background:var(--block); border:1px solid var(--line); padding:12px; display:grid; gap:10px; }\n\t\t\t\tlabel { display:grid; gap:4px; font-weight:700; font-size:12px; text-transform:uppercase; }\n\t\t\t\tinput, select, textarea {\n\t\t\t\t\tfont:inherit; padding:8px; border:1px solid var(--line);\n\t\t\t\t\tbackground:var(--bg); color:var(--fg); width:100%;\n\t\t\t\t}\n\t\t\t\t.row { display:grid; grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); gap:10px; }\n\t\t\t\tbutton {\n\t\t\t\t\tfont:inherit; font-weight:700; text-transform:uppercase; letter-spacing:1px;\n\t\t\t\t\tpadding:12px; border:1px solid var(--line); background:var(--accent);\n\t\t\t\t\tcolor:#fff; cursor:pointer;\n\t\t\t\t}\n\t\t\t\tbutton:hover { background:var(--head); color:var(--head-fg); }\n\n\t\t\t\t.err { background:var(--bad); color:#fff; padding:10px; border:1px solid var(--line); font-weight:700; }\n\n\t\t\t\t.table-wrap { overflow-x:auto; }\n\t\t\t\ttable { width:100%; border-collapse:collapse; font-size:14px; border:1px solid var(--line); }\n\t\t\t\tth { background:var(--head); color:var(--head-fg); text-align:left; padding:6px 8px; text-transform:uppercase; font-size:12px; }\n\t\t\t\ttd { padding:6px 8px; border-top:1px solid var(--line); vertical-align:top; }\n\t\t\t\t.out { display:inline-block; margin:0 6px 4px 0; padding:2px 8px; background:var(--block); border:1px solid var(--line); }\n\n\t\t\t\t.plan { border:1px solid var(--line); margin:14px 0; background:var(--block); }\n\t\t\t\t.plan h3 { margin:0; padding:8px 10px; font-size:15px; background:var(--accent); color:#fff; }\n\t\t\t\t.stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); }\n\t\t\t\t.stat { padding:8px 10px; border-right:1px solid var(--line); border-bottom:1px solid var(--line); }\n\t\t\t\t.stat b { display:block; font-size:11px; text-transform:uppercase; opacity:.8; }\n\t\t\t\t.stat span { font-size:18px; font-weight:700; }\n\t\t\t\t.plan .table-wrap { padding:0; }\n\t\t\t\t.plan table { border:0; }\n\n\t\t\t\t.win { color:var(--ok); font-weight:700; }\n\t\t\t\t.loss { color:var(--bad); font-weight:700; }\n\t\t\t\t.note { font-size:12px; opacity:.8; border-left:4px solid var(--line); padding-left:10px; margin-top:20px; }\n\t\t\t</style></head><body><main><h1>Chain analyzer</h1><form method=\"post\" action=\"/analyze\" id=\"f\"><label>Paste page HTML or JSON (saved in your browser) <textarea name=\"html\" rows=\"6\" placeholder=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<!doctype html><html lang=\"en\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><title>Chain analyzer</title><style>\n\t\t\t\t:root {\n\t\t\t\t\t--bg:#ffffff; --fg:#111111; --block:#f8f9fa; --line:#d0d4dc;\n\t\t\t\t\t--head:#1e293b; --head-fg:#ffffff; --accent:#1d4ed8;\n\t\t\t\t\t--ok:#0a7a32; --bad:#b00020;\n\t\t\t\t}\n\t\t\t\t@media (prefers-color-scheme: dark) {\n\t\t\t\t\t:root {\n\t\t\t\t\t\t--bg:#101114; --fg:#f2f2f2; --block:#1b1d22; --line:#333842;\n\t\t\t\t\t\t--head:#2d3139; --head-fg:#f2f2f2; --accent:#5b8cff;\n\t\t\t\t\t\t--ok:#4cd07d; --bad:#ff6b6b;\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t\t* { box-sizing:border-box; border-radius:0; }\n\t\t\t\tbody { margin:0; background:var(--bg); color:var(--fg); font:15px/1.5 system-ui,sans-serif; }\n\t\t\t\tmain { max-width:980px; margin:0 auto; padding:16px; }\n\t\t\t\th1 { margin:0 0 12px; font-size:22px; text-transform:uppercase; letter-spacing:1px; }\n\t\t\t\th2 { margin:24px 0 8px; font-size:16px; text-transform:uppercase; letter-spacing:1px;\n\t\t\t\t\tbackground:var(--head); color:var(--head-fg); padding:6px 10px; }\n\n\t\t\t\tform { background:var(--block); border:1px solid var(--line); padding:12px; display:grid; gap:10px; }\n\t\t\t\tlabel { display:grid; gap:4px; font-weight:700; font-size:12px; text-transform:uppercase; }\n\t\t\t\tinput, select, textarea {\n\t\t\t\t\tfont:inherit; padding:8px; border:1px solid var(--line);\n\t\t\t\t\tbackground:var(--bg); color:var(--fg); width:100%;\n\t\t\t\t}\n\t\t\t\t.row { display:grid; grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); gap:10px; }\n\t\t\t\tbutton {\n\t\t\t\t\tfont:inherit; font-weight:700; text-transform:uppercase; letter-spacing:1px;\n\t\t\t\t\tpadding:12px; border:1px solid var(--line); background:var(--accent);\n\t\t\t\t\tcolor:#fff; cursor:pointer;\n\t\t\t\t}\n\t\t\t\tbutton:hover { background:var(--head); color:var(--head-fg); }\n\n\t\t\t\t.err { background:var(--bad); color:#fff; padding:10px; border:1px solid var(--line); font-weight:700; }\n\n\t\t\t\t.table-wrap { overflow-x:auto; }\n\t\t\t\ttable { width:100%; border-collapse:collapse; font-size:14px; border:1px solid var(--line); }\n\t\t\t\tth { background:var(--head); color:var(--head-fg); text-align:left; padding:6px 8px; text-transform:uppercase; font-size:12px; }\n\t\t\t\ttd { padding:6px 8px; border-top:1px solid var(--line); vertical-align:top; }\n\t\t\t\t.out { display:inline-block; margin:0 6px 4px 0; padding:2px 8px; background:var(--block); border:1px solid var(--line); }\n\n\t\t\t\t.plan { border:1px solid var(--line); margin:14px 0; background:var(--block); }\n\t\t\t\t.plan h3 { margin:0; padding:8px 10px; font-size:15px; background:var(--accent); color:#fff; }\n\t\t\t\t.stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); }\n\t\t\t\t.stat { padding:8px 10px; border-right:1px solid var(--line); border-bottom:1px solid var(--line); }\n\t\t\t\t.stat b { display:block; font-size:11px; text-transform:uppercase; opacity:.8; }\n\t\t\t\t.stat span { font-size:18px; font-weight:700; }\n\t\t\t\t.plan .table-wrap { padding:0; }\n\t\t\t\t.plan table { border:0; }\n\n\t\t\t\t.win { color:var(--ok); font-weight:700; }\n\t\t\t\t.loss { color:var(--bad); font-weight:700; }\n\t\t\t\t.note { font-size:12px; opacity:.8; border-left:4px solid var(--line); padding-left:10px; margin-top:20px; }\n\n\t\t\t\t/* ===== added: Paste / Build tabs ===== */\n\t\t\t\t.bb-tabs { display:flex; gap:0; margin-bottom:8px; }\n\t\t\t\t.bb-tab {\n\t\t\t\t\tpadding:8px 16px; background:var(--bg); color:var(--fg);\n\t\t\t\t\tborder:1px solid var(--line); font-size:12px;\n\t\t\t\t}\n\t\t\t\t.bb-tab.active { background:var(--head); color:var(--head-fg); }\n\t\t\t\t.bb-tab.active:hover { background:var(--head); color:var(--head-fg); }\n\t\t\t\t.bb-row { display:grid; grid-template-columns:1fr 120px; gap:8px; margin-bottom:8px; }\n\t\t\t\t.bb-group { border:1px solid var(--line); background:var(--bg); padding:8px; margin-bottom:8px; }\n\t\t\t\t.bb-group-head {\n\t\t\t\t\tdisplay:flex; justify-content:space-between; align-items:center;\n\t\t\t\t\tfont-size:12px; font-weight:700; text-transform:uppercase; margin-bottom:6px;\n\t\t\t\t}\n\t\t\t\t.bb-team { display:grid; grid-template-columns:1fr 110px 40px; gap:6px; margin-bottom:6px; }\n\t\t\t\t.bb-small { padding:6px 10px; font-size:11px; letter-spacing:0; }\n\t\t\t\t.bb-x { padding:6px 0; background:var(--bad); }\n\t\t\t\t.bb-msg { color:var(--bad); font-size:12px; font-weight:700; margin:6px 0 0; min-height:1em; }\n\t\t\t\t.bb-panel-build { display:block; }\n\t\t\t\t.bb-panel-build[hidden], [data-panel][hidden] { display:none; }\n\t\t\t</style></head><body><main><h1>Chain analyzer</h1><form method=\"post\" action=\"/analyze\" id=\"f\"><div class=\"bet-input\"><div class=\"bb-tabs\"><button type=\"button\" class=\"bb-tab active\" data-tab=\"paste\">Paste</button> <button type=\"button\" class=\"bb-tab\" data-tab=\"build\">Build</button></div><div data-panel=\"paste\"><label>Paste page HTML or JSON (saved in your browser) <textarea name=\"html\" rows=\"6\" placeholder=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var2 string
 		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.ResolveAttributeValue(`{"bet_name":"ufc 332","bet":1,"groups":[[{"name":"A","odd":2.1},{"name":"B","odd":1.7}]]}`)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `view.templ`, Line: 72, Col: 137}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `view.templ`, Line: 99, Col: 137}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var2)
 		if templ_7745c5c3_Err != nil {
@@ -49,13 +49,13 @@ func Page(v ViewData) templ.Component {
 		var templ_7745c5c3_Var3 string
 		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(v.HTML)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `view.templ`, Line: 72, Col: 148}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `view.templ`, Line: 99, Col: 148}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "</textarea></label><div class=\"row\"><label>Mode <select name=\"mode\"><option value=\"best\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "</textarea></label></div><div data-panel=\"build\" class=\"bb-panel-build\" hidden><div class=\"bb-row\"><input id=\"bb-name\" type=\"text\" placeholder=\"Bet name (e.g. football 4-oct)\"> <input id=\"bb-stake\" type=\"number\" min=\"0\" step=\"any\" value=\"1\" title=\"Stake\"></div><div id=\"bb-groups\"></div><button type=\"button\" class=\"bb-small\" id=\"bb-add-group\">+ Add group</button><p id=\"bb-msg\" class=\"bb-msg\"></p></div></div><div class=\"row\"><label>Mode <select name=\"mode\"><option value=\"best\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -92,7 +92,7 @@ func Page(v ViewData) templ.Component {
 		var templ_7745c5c3_Var4 string
 		templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.ResolveAttributeValue(v.K)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `view.templ`, Line: 83, Col: 90}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `view.templ`, Line: 121, Col: 90}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var4)
 		if templ_7745c5c3_Err != nil {
@@ -105,7 +105,7 @@ func Page(v ViewData) templ.Component {
 		var templ_7745c5c3_Var5 string
 		templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.ResolveAttributeValue(v.M)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `view.templ`, Line: 84, Col: 79}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `view.templ`, Line: 122, Col: 79}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var5)
 		if templ_7745c5c3_Err != nil {
@@ -118,7 +118,7 @@ func Page(v ViewData) templ.Component {
 		var templ_7745c5c3_Var6 string
 		templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.ResolveAttributeValue(v.Top)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `view.templ`, Line: 85, Col: 84}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `view.templ`, Line: 123, Col: 84}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var6)
 		if templ_7745c5c3_Err != nil {
@@ -131,7 +131,7 @@ func Page(v ViewData) templ.Component {
 		var templ_7745c5c3_Var7 string
 		templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.ResolveAttributeValue(v.Bet)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `view.templ`, Line: 86, Col: 96}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `view.templ`, Line: 124, Col: 96}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var7)
 		if templ_7745c5c3_Err != nil {
@@ -149,7 +149,7 @@ func Page(v ViewData) templ.Component {
 			var templ_7745c5c3_Var8 string
 			templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.JoinStringErrs(v.Error)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `view.templ`, Line: 91, Col: 29}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `view.templ`, Line: 129, Col: 29}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var8))
 			if templ_7745c5c3_Err != nil {
@@ -168,13 +168,13 @@ func Page(v ViewData) templ.Component {
 			var templ_7745c5c3_Var9 string
 			templ_7745c5c3_Var9, templ_7745c5c3_Err = templ.JoinStringErrs(v.EventName)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `view.templ`, Line: 94, Col: 22}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `view.templ`, Line: 132, Col: 22}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var9))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 17, "</h2><div class=\"table-wrap\"><table><thead><tr><th>#</th><th>Outcomes (name · odd · fair)</th><th>Margin</th></tr></thead> <tbody>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 17, "</h2><div class=\"table-wrap\"><table><thead><tr><th>#</th><th>Outcomes (name � odd � fair)</th><th>Margin</th></tr></thead> <tbody>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -186,7 +186,7 @@ func Page(v ViewData) templ.Component {
 				var templ_7745c5c3_Var10 string
 				templ_7745c5c3_Var10, templ_7745c5c3_Err = templ.JoinStringErrs(f.N)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `view.templ`, Line: 107, Col: 19}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `view.templ`, Line: 145, Col: 19}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var10))
 				if templ_7745c5c3_Err != nil {
@@ -204,33 +204,33 @@ func Page(v ViewData) templ.Component {
 					var templ_7745c5c3_Var11 string
 					templ_7745c5c3_Var11, templ_7745c5c3_Err = templ.JoinStringErrs(o.Name)
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `view.templ`, Line: 110, Col: 38}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `view.templ`, Line: 148, Col: 38}
 					}
 					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var11))
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 21, " · ")
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 21, " � ")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
 					var templ_7745c5c3_Var12 string
 					templ_7745c5c3_Var12, templ_7745c5c3_Err = templ.JoinStringErrs(o.Odd)
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `view.templ`, Line: 110, Col: 51}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `view.templ`, Line: 148, Col: 52}
 					}
 					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var12))
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 22, " · ")
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 22, " � ")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
 					var templ_7745c5c3_Var13 string
 					templ_7745c5c3_Var13, templ_7745c5c3_Err = templ.JoinStringErrs(o.Fair)
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `view.templ`, Line: 110, Col: 65}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `view.templ`, Line: 148, Col: 67}
 					}
 					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var13))
 					if templ_7745c5c3_Err != nil {
@@ -248,7 +248,7 @@ func Page(v ViewData) templ.Component {
 				var templ_7745c5c3_Var14 string
 				templ_7745c5c3_Var14, templ_7745c5c3_Err = templ.JoinStringErrs(f.Margin)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `view.templ`, Line: 113, Col: 24}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `view.templ`, Line: 151, Col: 24}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var14))
 				if templ_7745c5c3_Err != nil {
@@ -271,7 +271,7 @@ func Page(v ViewData) templ.Component {
 				var templ_7745c5c3_Var15 string
 				templ_7745c5c3_Var15, templ_7745c5c3_Err = templ.JoinStringErrs(p.Title)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `view.templ`, Line: 122, Col: 20}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `view.templ`, Line: 160, Col: 20}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var15))
 				if templ_7745c5c3_Err != nil {
@@ -284,7 +284,7 @@ func Page(v ViewData) templ.Component {
 				var templ_7745c5c3_Var16 string
 				templ_7745c5c3_Var16, templ_7745c5c3_Err = templ.JoinStringErrs(p.Profit)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `view.templ`, Line: 124, Col: 67}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `view.templ`, Line: 162, Col: 67}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var16))
 				if templ_7745c5c3_Err != nil {
@@ -297,7 +297,7 @@ func Page(v ViewData) templ.Component {
 				var templ_7745c5c3_Var17 string
 				templ_7745c5c3_Var17, templ_7745c5c3_Err = templ.JoinStringErrs(p.Partial)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `view.templ`, Line: 125, Col: 62}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `view.templ`, Line: 163, Col: 62}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var17))
 				if templ_7745c5c3_Err != nil {
@@ -310,7 +310,7 @@ func Page(v ViewData) templ.Component {
 				var templ_7745c5c3_Var18 string
 				templ_7745c5c3_Var18, templ_7745c5c3_Err = templ.JoinStringErrs(p.Lose)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `view.templ`, Line: 126, Col: 68}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `view.templ`, Line: 164, Col: 68}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var18))
 				if templ_7745c5c3_Err != nil {
@@ -323,7 +323,7 @@ func Page(v ViewData) templ.Component {
 				var templ_7745c5c3_Var19 string
 				templ_7745c5c3_Var19, templ_7745c5c3_Err = templ.JoinStringErrs(p.Exp)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `view.templ`, Line: 127, Col: 54}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `view.templ`, Line: 165, Col: 54}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var19))
 				if templ_7745c5c3_Err != nil {
@@ -341,7 +341,7 @@ func Page(v ViewData) templ.Component {
 					var templ_7745c5c3_Var20 string
 					templ_7745c5c3_Var20, templ_7745c5c3_Err = templ.JoinStringErrs(r.Name)
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `view.templ`, Line: 143, Col: 24}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `view.templ`, Line: 181, Col: 24}
 					}
 					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var20))
 					if templ_7745c5c3_Err != nil {
@@ -354,7 +354,7 @@ func Page(v ViewData) templ.Component {
 					var templ_7745c5c3_Var21 string
 					templ_7745c5c3_Var21, templ_7745c5c3_Err = templ.JoinStringErrs(r.Odd)
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `view.templ`, Line: 144, Col: 23}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `view.templ`, Line: 182, Col: 23}
 					}
 					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var21))
 					if templ_7745c5c3_Err != nil {
@@ -367,7 +367,7 @@ func Page(v ViewData) templ.Component {
 					var templ_7745c5c3_Var22 string
 					templ_7745c5c3_Var22, templ_7745c5c3_Err = templ.JoinStringErrs(r.Win)
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `view.templ`, Line: 145, Col: 23}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `view.templ`, Line: 183, Col: 23}
 					}
 					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var22))
 					if templ_7745c5c3_Err != nil {
@@ -380,7 +380,7 @@ func Page(v ViewData) templ.Component {
 					var templ_7745c5c3_Var23 string
 					templ_7745c5c3_Var23, templ_7745c5c3_Err = templ.JoinStringErrs(r.Price)
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `view.templ`, Line: 146, Col: 25}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `view.templ`, Line: 184, Col: 25}
 					}
 					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var23))
 					if templ_7745c5c3_Err != nil {
@@ -415,7 +415,7 @@ func Page(v ViewData) templ.Component {
 					var templ_7745c5c3_Var26 string
 					templ_7745c5c3_Var26, templ_7745c5c3_Err = templ.JoinStringErrs(r.Net)
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `view.templ`, Line: 147, Col: 41}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `view.templ`, Line: 185, Col: 41}
 					}
 					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var26))
 					if templ_7745c5c3_Err != nil {
@@ -436,7 +436,7 @@ func Page(v ViewData) templ.Component {
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 43, "</main><script>\n\t\t\t\t(function () {\n\t\t\t\t\tvar KEY = \"ufcbet:v1\";\n\t\t\t\t\tvar f = document.getElementById(\"f\");\n\t\t\t\t\tvar names = [\"html\", \"mode\", \"k\", \"m\", \"top\", \"bet\"];\n\t\t\t\t\ttry {\n\t\t\t\t\t\tvar s = JSON.parse(localStorage.getItem(KEY) || \"{}\");\n\t\t\t\t\t\tnames.forEach(function (n) {\n\t\t\t\t\t\t\tif (f.elements[n] && s[n]) f.elements[n].value = s[n];\n\t\t\t\t\t\t});\n\t\t\t\t\t} catch (e) {}\n\t\t\t\t\tf.addEventListener(\"submit\", function () {\n\t\t\t\t\t\ttry {\n\t\t\t\t\t\t\tvar s = {};\n\t\t\t\t\t\t\tnames.forEach(function (n) { s[n] = f.elements[n].value; });\n\t\t\t\t\t\t\tlocalStorage.setItem(KEY, JSON.stringify(s));\n\t\t\t\t\t\t} catch (e) {}\n\t\t\t\t\t});\n\t\t\t\t})();\n\t\t\t</script></body></html>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 43, "</main><script>\n\t\t\t\t(function () {\n\t\t\t\t\tvar KEY = \"ufcbet:v1\";\n\t\t\t\t\tvar f = document.getElementById(\"f\");\n\t\t\t\t\tvar names = [\"html\", \"mode\", \"k\", \"m\", \"top\", \"bet\"];\n\t\t\t\t\ttry {\n\t\t\t\t\t\tvar s = JSON.parse(localStorage.getItem(KEY) || \"{}\");\n\t\t\t\t\t\tnames.forEach(function (n) {\n\t\t\t\t\t\t\tif (f.elements[n] && s[n]) f.elements[n].value = s[n];\n\t\t\t\t\t\t});\n\t\t\t\t\t} catch (e) {}\n\t\t\t\t\tf.addEventListener(\"submit\", function () {\n\t\t\t\t\t\ttry {\n\t\t\t\t\t\t\tvar s = {};\n\t\t\t\t\t\t\tnames.forEach(function (n) { s[n] = f.elements[n].value; });\n\t\t\t\t\t\t\tlocalStorage.setItem(KEY, JSON.stringify(s));\n\t\t\t\t\t\t} catch (e) {}\n\t\t\t\t\t});\n\t\t\t\t})();\n\t\t\t</script><script>\n\t\t\t\t/* ===== added: Paste / Build tabs ===== */\n\t\t\t\t(function () {\n\t\t\t\t\tvar f = document.getElementById(\"f\");\n\t\t\t\t\tvar ta = f.elements[\"html\"];\n\t\t\t\t\tvar nameEl = document.getElementById(\"bb-name\");\n\t\t\t\t\tvar stakeEl = document.getElementById(\"bb-stake\");\n\t\t\t\t\tvar groupsEl = document.getElementById(\"bb-groups\");\n\t\t\t\t\tvar msgEl = document.getElementById(\"bb-msg\");\n\t\t\t\t\tvar tabs = document.querySelectorAll(\".bb-tab\");\n\t\t\t\t\tvar panels = document.querySelectorAll(\"[data-panel]\");\n\n\t\t\t\t\tvar state = { bet_name: \"\", bet: 1, groups: [] };\n\n\t\t\t\t\tfunction emptyTeam() { return { name: \"\", odd: \"\" }; }\n\t\t\t\t\tfunction emptyGroup() { return [emptyTeam(), emptyTeam()]; }\n\n\t\t\t\t\tfunction showTab(tab) {\n\t\t\t\t\t\ttabs.forEach(function (t) { t.classList.toggle(\"active\", t.dataset.tab === tab); });\n\t\t\t\t\t\tpanels.forEach(function (p) { p.hidden = p.dataset.panel !== tab; });\n\t\t\t\t\t\tif (tab === \"build\") loadFromTextarea();\n\t\t\t\t\t}\n\n\t\t\t\t\tfunction loadFromTextarea() {\n\t\t\t\t\t\tmsgEl.textContent = \"\";\n\t\t\t\t\t\tvar raw = ta.value.trim();\n\t\t\t\t\t\tstate = { bet_name: \"\", bet: 1, groups: [] };\n\t\t\t\t\t\tif (raw) {\n\t\t\t\t\t\t\ttry {\n\t\t\t\t\t\t\t\tvar j = JSON.parse(raw);\n\t\t\t\t\t\t\t\tstate.bet_name = j.bet_name || \"\";\n\t\t\t\t\t\t\t\tstate.bet = (j.bet !== undefined && j.bet !== null) ? j.bet : 1;\n\t\t\t\t\t\t\t\tstate.groups = (j.groups || []).map(function (g) {\n\t\t\t\t\t\t\t\t\treturn g.map(function (t) {\n\t\t\t\t\t\t\t\t\t\treturn {\n\t\t\t\t\t\t\t\t\t\t\tname: (t.name !== undefined && t.name !== null) ? t.name : \"\",\n\t\t\t\t\t\t\t\t\t\t\todd: (t.odd !== undefined && t.odd !== null) ? t.odd : \"\"\n\t\t\t\t\t\t\t\t\t\t};\n\t\t\t\t\t\t\t\t\t});\n\t\t\t\t\t\t\t\t});\n\t\t\t\t\t\t\t} catch (e) {\n\t\t\t\t\t\t\t\tmsgEl.textContent = \"Textarea is not valid JSON (maybe pasted HTML). Starting with an empty form.\";\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t\tif (!state.groups.length) state.groups = [emptyGroup()];\n\t\t\t\t\t\tnameEl.value = state.bet_name;\n\t\t\t\t\t\tstakeEl.value = state.bet;\n\t\t\t\t\t\trender();\n\t\t\t\t\t}\n\n\t\t\t\t\tfunction sync() {\n\t\t\t\t\t\tstate.bet_name = nameEl.value;\n\t\t\t\t\t\tstate.bet = parseFloat(stakeEl.value) || 0;\n\t\t\t\t\t\tvar out = {\n\t\t\t\t\t\t\tbet_name: state.bet_name,\n\t\t\t\t\t\t\tbet: state.bet,\n\t\t\t\t\t\t\tgroups: state.groups\n\t\t\t\t\t\t\t\t.map(function (g) {\n\t\t\t\t\t\t\t\t\treturn g\n\t\t\t\t\t\t\t\t\t\t.filter(function (t) {\n\t\t\t\t\t\t\t\t\t\t\treturn String(t.name).trim() !== \"\" && t.odd !== \"\" && !isNaN(parseFloat(t.odd));\n\t\t\t\t\t\t\t\t\t\t})\n\t\t\t\t\t\t\t\t\t\t.map(function (t) {\n\t\t\t\t\t\t\t\t\t\t\treturn { name: String(t.name).trim(), odd: parseFloat(t.odd) };\n\t\t\t\t\t\t\t\t\t\t});\n\t\t\t\t\t\t\t\t})\n\t\t\t\t\t\t\t\t.filter(function (g) { return g.length; })\n\t\t\t\t\t\t};\n\t\t\t\t\t\tta.value = JSON.stringify(out, null, 2);\n\t\t\t\t\t\tta.dispatchEvent(new Event(\"input\", { bubbles: true }));\n\t\t\t\t\t}\n\n\t\t\t\t\tfunction render() {\n\t\t\t\t\t\tgroupsEl.innerHTML = \"\";\n\t\t\t\t\t\tstate.groups.forEach(function (group, gi) {\n\t\t\t\t\t\t\tvar box = document.createElement(\"div\");\n\t\t\t\t\t\t\tbox.className = \"bb-group\";\n\n\t\t\t\t\t\t\tvar head = document.createElement(\"div\");\n\t\t\t\t\t\t\thead.className = \"bb-group-head\";\n\t\t\t\t\t\t\tvar title = document.createElement(\"span\");\n\t\t\t\t\t\t\ttitle.textContent = \"Group \" + (gi + 1);\n\t\t\t\t\t\t\tvar rmGroup = document.createElement(\"button\");\n\t\t\t\t\t\t\trmGroup.type = \"button\";\n\t\t\t\t\t\t\trmGroup.className = \"bb-small\";\n\t\t\t\t\t\t\trmGroup.textContent = \"Remove group\";\n\t\t\t\t\t\t\trmGroup.onclick = function () { state.groups.splice(gi, 1); render(); sync(); };\n\t\t\t\t\t\t\thead.appendChild(title);\n\t\t\t\t\t\t\thead.appendChild(rmGroup);\n\t\t\t\t\t\t\tbox.appendChild(head);\n\n\t\t\t\t\t\t\tgroup.forEach(function (team, ti) {\n\t\t\t\t\t\t\t\tvar row = document.createElement(\"div\");\n\t\t\t\t\t\t\t\trow.className = \"bb-team\";\n\n\t\t\t\t\t\t\t\tvar n = document.createElement(\"input\");\n\t\t\t\t\t\t\t\tn.type = \"text\";\n\t\t\t\t\t\t\t\tn.placeholder = \"Team name\";\n\t\t\t\t\t\t\t\tn.value = team.name;\n\t\t\t\t\t\t\t\tn.oninput = function () { team.name = n.value; sync(); };\n\n\t\t\t\t\t\t\t\tvar o = document.createElement(\"input\");\n\t\t\t\t\t\t\t\to.type = \"number\";\n\t\t\t\t\t\t\t\to.step = \"any\";\n\t\t\t\t\t\t\t\to.placeholder = \"Odd\";\n\t\t\t\t\t\t\t\to.value = team.odd;\n\t\t\t\t\t\t\t\to.oninput = function () { team.odd = o.value; sync(); };\n\n\t\t\t\t\t\t\t\tvar x = document.createElement(\"button\");\n\t\t\t\t\t\t\t\tx.type = \"button\";\n\t\t\t\t\t\t\t\tx.className = \"bb-small bb-x\";\n\t\t\t\t\t\t\t\tx.textContent = \"\\u2715\";\n\t\t\t\t\t\t\t\tx.onclick = function () { group.splice(ti, 1); render(); sync(); };\n\n\t\t\t\t\t\t\t\trow.appendChild(n);\n\t\t\t\t\t\t\t\trow.appendChild(o);\n\t\t\t\t\t\t\t\trow.appendChild(x);\n\t\t\t\t\t\t\t\tbox.appendChild(row);\n\t\t\t\t\t\t\t});\n\n\t\t\t\t\t\t\tvar addTeam = document.createElement(\"button\");\n\t\t\t\t\t\t\taddTeam.type = \"button\";\n\t\t\t\t\t\t\taddTeam.className = \"bb-small\";\n\t\t\t\t\t\t\taddTeam.textContent = \"+ Add team\";\n\t\t\t\t\t\t\taddTeam.onclick = function () { group.push(emptyTeam()); render(); };\n\t\t\t\t\t\t\tbox.appendChild(addTeam);\n\n\t\t\t\t\t\t\tgroupsEl.appendChild(box);\n\t\t\t\t\t\t});\n\t\t\t\t\t}\n\n\t\t\t\t\ttabs.forEach(function (t) {\n\t\t\t\t\t\tt.addEventListener(\"click\", function () { showTab(t.dataset.tab); });\n\t\t\t\t\t});\n\t\t\t\t\tdocument.getElementById(\"bb-add-group\").onclick = function () {\n\t\t\t\t\t\tstate.groups.push(emptyGroup());\n\t\t\t\t\t\trender();\n\t\t\t\t\t};\n\t\t\t\t\tnameEl.addEventListener(\"input\", sync);\n\t\t\t\t\tstakeEl.addEventListener(\"input\", sync);\n\n\t\t\t\t\t// Enter inside the Build form should not submit the whole form\n\t\t\t\t\tdocument.querySelector('[data-panel=\"build\"]').addEventListener(\"keydown\", function (e) {\n\t\t\t\t\t\tif (e.key === \"Enter\") e.preventDefault();\n\t\t\t\t\t});\n\t\t\t\t})();\n\t\t\t</script></body></html>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
