@@ -18,7 +18,7 @@ templ Page(v ViewData) {
 						--bg:#101114; --fg:#f2f2f2; --block:#1b1d22; --line:#333842;
 						--head:#2d3139; --head-fg:#f2f2f2; --accent:#5b8cff;
 						--ok:#4cd07d; --bad:#ff6b6b;
-			1		}
+					}
 				}
 				* { box-sizing:border-box; border-radius:0; }
 				body { margin:0; background:var(--bg); color:var(--fg); font:15px/1.5 system-ui,sans-serif; }
@@ -82,6 +82,69 @@ templ Page(v ViewData) {
 				.bb-msg { color:var(--bad); font-size:12px; font-weight:700; margin:6px 0 0; min-height:1em; }
 				.bb-panel-build { display:block; }
 				.bb-panel-build[hidden], [data-panel][hidden] { display:none; }
+
+				/* ===== new: Graph view ===== */
+				.gv-group { display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:10px;
+					border:1px solid var(--line); background:var(--bg); padding:26px 8px 10px; margin-bottom:8px; }
+				.gv-team { position:relative; min-width:120px; text-align:center; padding:10px 14px;
+					border:1px solid var(--line); background:var(--block); cursor:pointer; user-select:none; }
+				.gv-team b { display:block; font-size:14px; }
+				.gv-team span { font-size:12px; opacity:.8; }
+				.gv-team::before { content:"\25BC"; position:absolute; left:50%; top:-20px; transform:translateX(-50%);
+					color:var(--accent); font-size:16px; opacity:0; transition:opacity .15s, top .15s; }
+				.gv-team:hover { border-color:var(--accent); }
+				.gv-team:hover::before { opacity:1; top:-17px; }
+				.gv-team.pick { background:var(--accent); color:#fff; border-color:var(--accent); }
+				.gv-team.pick::before { opacity:1; top:-17px; color:var(--ok); }
+				.gv-vs { font-weight:700; font-size:12px; opacity:.7; }
+				.gv-title { font-size:12px; font-weight:700; text-transform:uppercase; margin:0 0 8px; }
+				.gv-sum { font-size:12px; margin:6px 0 0; }
+
+				/* ===== new: Plans graph tab ===== */
+				.pg-hint { font-size:12px; opacity:.8; margin:0 0 8px; }
+				.pg-plan { border:1px solid var(--line); background:var(--block); margin:0 0 14px; }
+				.pg-title { margin:0; padding:8px 10px; font-size:15px; background:var(--accent); color:#fff; }
+				.pg-stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); }
+				.pg-stat { padding:6px 10px; border-right:1px solid var(--line); border-bottom:1px solid var(--line); }
+				.pg-stat b { display:block; font-size:11px; text-transform:uppercase; opacity:.8; }
+				.pg-stat span { font-size:16px; font-weight:700; }
+				.pg-tools { display:flex; gap:8px; align-items:center; padding:8px 10px; flex-wrap:wrap; }
+				.pg-sum { font-size:12px; font-weight:700; }
+				.pg-wrap { overflow-x:auto; padding:8px 10px 12px; background:var(--bg);
+					border-top:1px solid var(--line); border-bottom:1px solid var(--line); }
+				.pg-canvas { position:relative; }
+				.pg-svg { position:absolute; left:0; top:0; pointer-events:none; overflow:visible; }
+				.pg-col { position:absolute; text-align:left; font-size:11px;
+					font-weight:700; text-transform:uppercase; opacity:.75; }
+				.pg-vs { position:absolute; text-align:center; font-size:12px; font-weight:700; opacity:.7; }
+				.pg-node { position:absolute; width:170px; height:44px; border:2px solid var(--line);
+					background:var(--block); display:flex; align-items:center; justify-content:center;
+					text-align:center; font-size:12px; font-weight:700; line-height:1.2;
+					padding:2px 6px 8px; cursor:pointer; overflow:hidden; user-select:none; z-index:1; }
+				.pg-node:hover { border-color:var(--accent); }
+				.pg-node.on { border-color:var(--c); background:var(--bg); }
+				.pg-dots { position:absolute; left:0; right:0; bottom:1px; display:flex; justify-content:center; gap:2px; }
+				.pg-dot { width:8px; height:8px; display:block; }
+				.pg-rows { overflow-x:auto; }
+				.pg-row { display:grid; grid-template-columns:14px minmax(180px,1fr) 70px 60px 70px 70px; gap:10px;
+					align-items:center; padding:8px 10px; border-top:1px solid var(--line);
+					background:var(--bg); cursor:pointer; font-size:13px; min-width:560px; }
+				.pg-row:first-child { border-top:0; }
+				.pg-row:hover { background:var(--block); }
+				.pg-row.on { background:var(--block); box-shadow:inset 4px 0 0 var(--c); }
+				.pg-chip { width:14px; height:14px; background:var(--c); border:1px solid rgba(0,0,0,.35); }
+				.pg-num { text-align:right; white-space:nowrap; font-weight:700; }
+				.pg-head { background:var(--head); color:var(--head-fg); cursor:default; font-size:11px;
+					font-weight:700; text-transform:uppercase; }
+				.pg-head:hover { background:var(--head); }
+
+				/* sub tabs: one per plan */
+				.pg-plan[hidden] { display:none; }
+				.pg-subtabs { display:flex; flex-wrap:wrap; gap:0; margin-bottom:8px; }
+				.pg-sub { padding:6px 12px; font-size:11px; letter-spacing:0; background:var(--bg);
+					color:var(--fg); border:1px solid var(--line); }
+				.pg-sub.active { background:var(--accent); color:#fff; border-color:var(--accent); }
+				.pg-sub.active:hover { background:var(--accent); color:#fff; }
 			</style>
 		</head>
 		<body>
@@ -92,6 +155,8 @@ templ Page(v ViewData) {
 						<div class="bb-tabs">
 							<button type="button" class="bb-tab active" data-tab="paste">Paste</button>
 							<button type="button" class="bb-tab" data-tab="build">Build</button>
+							<button type="button" class="bb-tab" data-tab="graph">Graph</button>
+							<button type="button" class="bb-tab" data-tab="plans">Plans</button>
 						</div>
 						<div data-panel="paste">
 <label>
@@ -107,6 +172,17 @@ templ Page(v ViewData) {
 							<div id="bb-groups"></div>
 							<button type="button" class="bb-small" id="bb-add-group">+ Add group</button>
 							<p id="bb-msg" class="bb-msg"></p>
+						</div>
+						<div data-panel="graph" hidden>
+							<p class="gv-title" id="gv-title"></p>
+							<div id="gv-box"></div>
+							<p class="gv-sum" id="gv-sum"></p>
+							<p class="bb-msg" id="gv-msg"></p>
+						</div>
+						<div data-panel="plans" hidden>
+							<p class="pg-hint">Graph of the Results below. Click a combo (or a name in the graph) to draw its arrows in its own color. Click several to compare.</p>
+							<div id="pg-box"></div>
+							<p class="bb-msg" id="pg-msg"></p>
 						</div>
 					</div>
 					<div class="row">
@@ -135,7 +211,7 @@ templ Page(v ViewData) {
 							<thead>
 								<tr>
 									<th>#</th>
-									<th>Outcomes (name � odd � fair)</th>
+									<th>Outcomes (name   odd   fair)</th>
 									<th>Margin</th>
 								</tr>
 							</thead>
@@ -145,7 +221,7 @@ templ Page(v ViewData) {
 										<td>{ f.N }</td>
 										<td>
 											for _, o := range f.Outcomes {
-												<span class="out">{ o.Name } � { o.Odd } � { o.Fair }</span>
+												<span class="out">{ o.Name }   { o.Odd }   { o.Fair }</span>
 											}
 										</td>
 										<td>{ f.Margin }</td>
@@ -358,6 +434,380 @@ templ Page(v ViewData) {
 					document.querySelector('[data-panel="build"]').addEventListener("keydown", function (e) {
 						if (e.key === "Enter") e.preventDefault();
 					});
+				})();
+			</script>
+			<script>
+				/* ===== new: Graph view ===== */
+				(function () {
+					var f = document.getElementById("f");
+					var ta = f.elements["html"];
+					var box = document.getElementById("gv-box");
+					var title = document.getElementById("gv-title");
+					var sum = document.getElementById("gv-sum");
+					var msg = document.getElementById("gv-msg");
+					var picks = {}; // "gi:ti" -> true
+
+					function draw() {
+						box.innerHTML = ""; msg.textContent = ""; title.textContent = "";
+						var j;
+						try { j = JSON.parse(ta.value.trim() || "{}"); }
+						catch (e) { msg.textContent = "Textarea is not valid JSON, so no graph."; sum.textContent = ""; return; }
+						title.textContent = (j.bet_name || "") + (j.bet ? "  |  stake " + j.bet : "");
+						var groups = j.groups || [];
+						if (!groups.length) { msg.textContent = "No groups yet. Add some in Paste or Build."; sum.textContent = ""; return; }
+
+						groups.forEach(function (g, gi) {
+							var row = document.createElement("div");
+							row.className = "gv-group";
+							g.forEach(function (t, ti) {
+								if (ti > 0) {
+									var vs = document.createElement("div");
+									vs.className = "gv-vs"; vs.textContent = "VS";
+									row.appendChild(vs);
+								}
+								var key = gi + ":" + ti;
+								var el = document.createElement("div");
+								el.className = "gv-team" + (picks[key] ? " pick" : "");
+								el.innerHTML = "<b></b><span></span>";
+								el.firstChild.textContent = t.name;
+								el.lastChild.textContent =  t.odd;
+								el.onclick = function () {
+									// one bet per group
+									g.forEach(function (_, k) { delete picks[gi + ":" + k]; });
+									if (!el.classList.contains("pick")) picks[key] = true;
+									draw();
+								};
+								row.appendChild(el);
+							});
+							box.appendChild(row);
+						});
+
+						var chosen = [];
+						groups.forEach(function (g, gi) {
+							g.forEach(function (t, ti) { if (picks[gi + ":" + ti]) chosen.push(t.name + " (" + t.odd + ")"); });
+						});
+						sum.textContent = chosen.length ? "Bet on: " + chosen.join("  \u2192  ") : "Hover a team to see the arrow, click to mark your bet.";
+					}
+
+					document.querySelector('.bb-tab[data-tab="graph"]').addEventListener("click", function () {
+						picks = {};
+						draw();
+					});
+				})();
+			</script>
+			<script>
+				/* ===== new: Plans graph tab (reads the Results sections below) ===== */
+				(function () {
+					var box = document.getElementById("pg-box");
+					var msg = document.getElementById("pg-msg");
+					var NS = "http://www.w3.org/2000/svg";
+					var COLORS = ["#e6194b", "#3cb44b", "#f58231", "#911eb4", "#0abab5",
+						"#d4a017", "#f032e6", "#4363d8", "#9a6324", "#808000"];
+					var CW = 170, GX = 60, NH = 44, GY = 70, LBL = 76; // GX = space for VS, GY = space for arrows
+					var saved = {}; // plan title -> selected rows, so picks survive tab switches
+
+					function el(tag, cls, text) {
+						var e = document.createElement(tag);
+						if (cls) e.className = cls;
+						if (text !== undefined) e.textContent = text;
+						return e;
+					}
+					function svgEl(tag, attrs) {
+						var e = document.createElementNS(NS, tag);
+						for (var k in attrs) e.setAttribute(k, attrs[k]);
+						return e;
+					}
+					function txt(e) { return ((e && e.textContent) || "").replace(/\s+/g, " ").trim(); }
+					function num(s) {
+						var m = String(s).replace(/,/g, "").match(/\d+(\.\d+)?/);
+						if (!m) return 0;
+						return (/-/.test(s) ? -1 : 1) * parseFloat(m[0]);
+					}
+
+					// read the server-rendered Results
+					function readPlans() {
+						var out = [];
+						document.querySelectorAll("section.plan").forEach(function (sec) {
+							var p = { title: txt(sec.querySelector("h3")), stats: [], rows: [], hover: -1 };
+							sec.querySelectorAll(".stat").forEach(function (s) {
+								p.stats.push({ k: txt(s.querySelector("b")), v: txt(s.querySelector("span")) });
+							});
+							sec.querySelectorAll("tbody tr").forEach(function (tr) {
+								var td = tr.querySelectorAll("td");
+								if (td.length < 5) return;
+								p.rows.push({
+									names: txt(td[0]).split(/\s+:\s+/).map(function (s) { return s.trim(); }),
+									odd: txt(td[1]), chance: txt(td[2]), price: txt(td[3]),
+									net: txt(td[4]), cls: td[4].className
+								});
+							});
+							var m = p.title.match(/fights?\s+([\d,\s]+)/i);
+							p.fights = m ? m[1].split(",").map(function (s) { return s.trim(); }).filter(Boolean) : [];
+							p.sel = saved[p.title] || {};
+							saved[p.title] = p.sel;
+							out.push(p);
+						});
+						return out;
+					}
+
+					// build the DOM of one plan once, paint() updates it afterwards
+					function build(p, pi) {
+						p.pi = pi;
+						var n = 0;
+						p.rows.forEach(function (r) { n = Math.max(n, r.names.length); });
+						p.n = n;
+
+						p.pos = {};
+						var lists = [];
+						var maxc = 1;
+						for (var c = 0; c < n; c++) {
+							var seen = {}, list = [];
+							p.rows.forEach(function (r) {
+								var nm = r.names[c];
+								if (nm !== undefined && !seen[nm]) { seen[nm] = 1; list.push(nm); }
+							});
+							lists.push(list);
+							maxc = Math.max(maxc, list.length);
+						}
+						p.W = LBL + maxc * CW + (maxc - 1) * GX;
+						p.H = Math.max(1, n) * NH + Math.max(0, n - 1) * GY;
+						p.lists = lists;
+						lists.forEach(function (list, c) {
+							var rowW = list.length * CW + (list.length - 1) * GX;
+							var x0 = LBL + (p.W - LBL - rowW) / 2;
+							list.forEach(function (nm, k) {
+								p.pos[c + "|" + nm] = { x: x0 + k * (CW + GX), y: c * (NH + GY), name: nm, c: c };
+							});
+						});
+
+						var root = el("section", "pg-plan");
+						root.appendChild(el("h3", "pg-title", p.title));
+
+						var stats = el("div", "pg-stats");
+						p.stats.forEach(function (s) {
+							var d = el("div", "pg-stat");
+							d.appendChild(el("b", "", s.k));
+							d.appendChild(el("span", "", s.v));
+							stats.appendChild(d);
+						});
+						root.appendChild(stats);
+
+						var tools = el("div", "pg-tools");
+						var bAll = el("button", "bb-small", "Select all");
+						bAll.type = "button";
+						bAll.onclick = function () { p.rows.forEach(function (r, ri) { p.sel[ri] = true; }); paint(p); };
+						var bNone = el("button", "bb-small", "Clear");
+						bNone.type = "button";
+						bNone.onclick = function () { p.sel = {}; saved[p.title] = p.sel; paint(p); };
+						var sum = el("span", "pg-sum", "");
+						tools.appendChild(bAll); tools.appendChild(bNone); tools.appendChild(sum);
+						root.appendChild(tools);
+
+						var wrap = el("div", "pg-wrap");
+						var canvas = el("div", "pg-canvas");
+						canvas.style.width = p.W + "px";
+						canvas.style.height = p.H + "px";
+
+						var svg = svgEl("svg", { "class": "pg-svg", width: p.W, height: p.H });
+						canvas.appendChild(svg);
+
+						for (var c2 = 0; c2 < n; c2++) {
+							var lab = el("div", "pg-col", p.fights[c2] ? "Fight " + p.fights[c2] : "Fight " + (c2 + 1));
+							lab.style.left = "0px";
+							lab.style.top = (c2 * (NH + GY) + NH / 2 - 8) + "px";
+							lab.style.width = (LBL - 8) + "px";
+							canvas.appendChild(lab);
+							// "VS" between the two sides of one fight
+							for (var k2 = 1; k2 < lists[c2].length; k2++) {
+								var rightNode = p.pos[c2 + "|" + lists[c2][k2]];
+								var vs = el("div", "pg-vs", "VS");
+								vs.style.left = (rightNode.x - GX) + "px";
+								vs.style.width = GX + "px";
+								vs.style.top = (rightNode.y + NH / 2 - 9) + "px";
+								canvas.appendChild(vs);
+							}
+						}
+
+						var nodes = {};
+						Object.keys(p.pos).forEach(function (key) {
+							var pos = p.pos[key];
+							var nd = el("div", "pg-node");
+							nd.style.left = pos.x + "px";
+							nd.style.top = pos.y + "px";
+							nd.title = pos.name;
+							nd.appendChild(el("span", "", pos.name));
+							var dots = el("div", "pg-dots");
+							nd.appendChild(dots);
+							// click a name: toggle every combo that passes through it
+							nd.onclick = function () {
+								var idx = [];
+								p.rows.forEach(function (r, ri) { if (r.names[pos.c] === pos.name) idx.push(ri); });
+								var all = idx.every(function (ri) { return p.sel[ri]; });
+								idx.forEach(function (ri) { if (all) delete p.sel[ri]; else p.sel[ri] = true; });
+								paint(p);
+							};
+							canvas.appendChild(nd);
+							nodes[key] = { el: nd, dots: dots };
+						});
+						wrap.appendChild(canvas);
+						root.appendChild(wrap);
+
+						// combo list (detail)
+						var list = el("div", "pg-rows");
+						var head = el("div", "pg-row pg-head");
+						["", "Combo", "Odd", "Chance", "Price", "Net"].forEach(function (h, i) {
+							var d = el("span", i >= 2 ? "pg-num" : "", h);
+							head.appendChild(d);
+						});
+						list.appendChild(head);
+
+						var rowEls = [];
+						p.rows.forEach(function (r, ri) {
+							var col = COLORS[ri % COLORS.length];
+							var row = el("div", "pg-row");
+							row.style.setProperty("--c", col);
+							row.appendChild(el("span", "pg-chip"));
+							row.appendChild(el("span", "", r.names.join("  \u2192  ")));
+							row.appendChild(el("span", "pg-num", r.odd));
+							row.appendChild(el("span", "pg-num", r.chance));
+							row.appendChild(el("span", "pg-num", r.price));
+							row.appendChild(el("span", "pg-num " + r.cls, r.net));
+							row.onclick = function () {
+								if (p.sel[ri]) delete p.sel[ri]; else p.sel[ri] = true;
+								paint(p);
+							};
+							row.onmouseenter = function () { p.hover = ri; paint(p); };
+							row.onmouseleave = function () { p.hover = -1; paint(p); };
+							list.appendChild(row);
+							rowEls.push(row);
+						});
+						root.appendChild(list);
+
+						p.ui = { root: root, svg: svg, nodes: nodes, rows: rowEls, sum: sum };
+					}
+
+					function paint(p) {
+						var svg = p.ui.svg;
+						while (svg.firstChild) svg.removeChild(svg.firstChild);
+						var defs = svgEl("defs", {});
+						svg.appendChild(defs);
+						var made = {};
+
+						function marker(col) {
+							var id = "pgm" + p.pi + "_" + col.replace("#", "");
+							if (!made[id]) {
+								made[id] = 1;
+								var m = svgEl("marker", { id: id, viewBox: "0 0 10 10", refX: "9", refY: "5",
+									markerWidth: "6", markerHeight: "6", orient: "auto" });
+								m.appendChild(svgEl("path", { d: "M0 0 L10 5 L0 10 z", fill: col }));
+								defs.appendChild(m);
+							}
+							return "url(#" + id + ")";
+						}
+						function edge(a, b, off, col, w, op) {
+							var x1 = a.x + CW / 2 + off, y1 = a.y + NH;
+							var x2 = b.x + CW / 2 + off, y2 = b.y;
+							var ym = (y1 + y2) / 2;
+							var path = svgEl("path", {
+								d: "M" + x1 + " " + y1 + " C" + x1 + " " + ym + " " + x2 + " " + ym + " " + x2 + " " + y2,
+								fill: "none", "stroke-width": w, "stroke-opacity": op, "marker-end": marker(col)
+							});
+							path.style.stroke = col;
+							svg.appendChild(path);
+						}
+
+						var act = [];
+						p.rows.forEach(function (r, ri) { if (p.sel[ri] || p.hover === ri) act.push(ri); });
+
+						// all possible arrows in gray (once each)
+						var drawn = {};
+						p.rows.forEach(function (r) {
+							for (var c = 0; c < r.names.length - 1; c++) {
+								var ka = c + "|" + r.names[c], kb = (c + 1) + "|" + r.names[c + 1], k = ka + ">" + kb;
+								if (drawn[k]) continue;
+								drawn[k] = 1;
+								edge(p.pos[ka], p.pos[kb], 0, "#8b93a3", 1.5, act.length ? 0.25 : 0.6);
+							}
+						});
+
+						// chosen combos on top, each in its own color
+						var cols = {};
+						act.forEach(function (ri, rank) {
+							var r = p.rows[ri], col = COLORS[ri % COLORS.length];
+							var off = (rank - (act.length - 1) / 2) * 4;
+							for (var c = 0; c < r.names.length - 1; c++) {
+								edge(p.pos[c + "|" + r.names[c]], p.pos[(c + 1) + "|" + r.names[c + 1]], off, col, 3, 1);
+							}
+							r.names.forEach(function (nm, c) {
+								var k = c + "|" + nm;
+								(cols[k] = cols[k] || []).push(col);
+							});
+						});
+
+						Object.keys(p.ui.nodes).forEach(function (k) {
+							var nd = p.ui.nodes[k], list = cols[k] || [];
+							nd.el.classList.toggle("on", list.length > 0);
+							if (list.length) nd.el.style.setProperty("--c", list[0]);
+							nd.dots.innerHTML = "";
+							list.forEach(function (col) {
+								var d = el("i", "pg-dot");
+								d.style.background = col;
+								nd.dots.appendChild(d);
+							});
+						});
+
+						var cnt = 0, price = 0, chance = 0;
+						p.rows.forEach(function (r, ri) {
+							var on = !!p.sel[ri];
+							p.ui.rows[ri].classList.toggle("on", on);
+							if (on) { cnt++; price += num(r.price); chance += num(r.chance); }
+						});
+						p.ui.sum.textContent = cnt
+							? "Selected " + cnt + " of " + p.rows.length + "  |  price $" + price.toFixed(2) + "  |  chance " + chance.toFixed(1) + "%"
+							: "Nothing selected. Click a combo below or a name in the graph.";
+					}
+
+					var activePlan = 0; // which sub tab is open
+
+					// "#1 · fights 10, 13 · 4 combos = $4.00" -> "#1 · fights 10, 13"
+					function planLabel(p) {
+						var parts = p.title.split(/\s*\u00b7\s*/);
+						return parts.length > 1 ? parts.slice(0, 2).join(" \u00b7 ") : p.title;
+					}
+
+					function show() {
+						box.innerHTML = ""; msg.textContent = "";
+						var plans = readPlans();
+						if (!plans.length) {
+							msg.textContent = "No results yet. Press Analyze first, then open this tab.";
+							return;
+						}
+						if (activePlan >= plans.length) activePlan = 0;
+
+						var bar = el("div", "pg-subtabs");
+						box.appendChild(bar);
+						var btns = [];
+
+						plans.forEach(function (p, pi) {
+							build(p, pi);
+							p.ui.root.hidden = pi !== activePlan;
+							box.appendChild(p.ui.root);
+							paint(p);
+
+							var b = el("button", "pg-sub" + (pi === activePlan ? " active" : ""), planLabel(p));
+							b.type = "button";
+							b.title = p.title;
+							b.onclick = function () {
+								activePlan = pi;
+								btns.forEach(function (x, i) { x.classList.toggle("active", i === pi); });
+								plans.forEach(function (q, i) { q.ui.root.hidden = i !== pi; });
+							};
+							btns.push(b);
+							bar.appendChild(b);
+						});
+					}
+
+					document.querySelector('.bb-tab[data-tab="plans"]').addEventListener("click", show);
 				})();
 			</script>
 		</body>
