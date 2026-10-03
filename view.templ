@@ -76,7 +76,7 @@ templ Page(v ViewData) {
 					display:flex; justify-content:space-between; align-items:center;
 					font-size:12px; font-weight:700; text-transform:uppercase; margin-bottom:6px;
 				}
-				.bb-team { display:grid; grid-template-columns:1fr 110px 40px; gap:6px; margin-bottom:6px; }
+				.bb-team { display:grid; grid-template-columns:1fr 110px 64px 40px; gap:6px; margin-bottom:6px; }
 				.bb-small { padding:6px 10px; font-size:11px; letter-spacing:0; }
 				.bb-x { padding:6px 0; background:var(--bad); }
 				.bb-msg { color:var(--bad); font-size:12px; font-weight:700; margin:6px 0 0; min-height:1em; }
@@ -138,6 +138,19 @@ templ Page(v ViewData) {
 					font-weight:700; text-transform:uppercase; }
 				.pg-head:hover { background:var(--head); }
 
+				/* ===== new: Convert tab ===== */
+				.cv-bar { display:flex; gap:8px; flex-wrap:wrap; margin:8px 0 0; }
+				#cv-out { font-family:ui-monospace,Menlo,Consolas,monospace; font-size:12px; margin-top:4px; }
+				.cv-ok { color:var(--ok); }
+				.cv-chk { display:flex; align-items:center; gap:6px; }
+				.cv-chk input { width:auto; }
+
+				/* ===== new: flags (only drawn when a valid 2 letter lang exists) ===== */
+				.flag { width:20px; height:15px; object-fit:cover; vertical-align:middle; margin-right:6px;
+					border:1px solid var(--line); display:inline-block; }
+				.flag-txt { width:auto; height:auto; font-size:10px; font-weight:700; padding:0 3px; line-height:15px;
+					background:var(--head); color:var(--head-fg); }
+
 				/* sub tabs: one per plan */
 				.pg-plan[hidden] { display:none; }
 				.pg-subtabs { display:flex; flex-wrap:wrap; gap:0; margin-bottom:8px; }
@@ -157,12 +170,13 @@ templ Page(v ViewData) {
 							<button type="button" class="bb-tab" data-tab="build">Build</button>
 							<button type="button" class="bb-tab" data-tab="graph">Graph</button>
 							<button type="button" class="bb-tab" data-tab="plans">Plans</button>
+							<button type="button" class="bb-tab" data-tab="convert">Convert</button>
 						</div>
 						<div data-panel="paste">
-<label>
-	Paste page HTML or JSON (saved in your browser)
-	<textarea name="html" rows="6" placeholder={ `{"bet_name":"ufc 332","bet":1,"groups":[[{"name":"A","odd":2.1},{"name":"B","odd":1.7}]]}` }>{ v.HTML }</textarea>
-</label>
+                        <label>
+                        	Paste page HTML or JSON (saved in your browser)
+                        	<textarea name="html" rows="6" placeholder={ `{"bet_name":"ufc 332","bet":1,"groups":[[{"name":"A","odd":2.1},{"name":"B","odd":1.7}]]}` }>{ v.HTML }</textarea>
+                        </label>
 						</div>
 						<div data-panel="build" class="bb-panel-build" hidden>
 							<div class="bb-row">
@@ -183,6 +197,26 @@ templ Page(v ViewData) {
 							<p class="pg-hint">Graph of the Results below. Click a combo (or a name in the graph) to draw its arrows in its own color. Click several to compare.</p>
 							<div id="pg-box"></div>
 							<p class="bb-msg" id="pg-msg"></p>
+						</div>
+						<div data-panel="convert" hidden>
+							<label>
+								Page HTML
+								<textarea id="cv-in" rows="6" placeholder="Paste the page HTML here, then press Convert"></textarea>
+							</label>
+							<div class="cv-bar">
+								<label class="cv-chk"><input type="checkbox" id="cv-draw"/> Include draw (X)</label>
+							</div>
+							<div class="cv-bar">
+								<button type="button" class="bb-small" id="cv-go">Convert to JSON</button>
+								<button type="button" class="bb-small" id="cv-copy">Copy</button>
+								<button type="button" class="bb-small" id="cv-use">Use in Paste</button>
+								<button type="button" class="bb-small" id="cv-clear">Clear</button>
+							</div>
+							<p class="bb-msg" id="cv-msg"></p>
+							<label>
+								JSON result
+								<textarea id="cv-out" rows="10" readonly></textarea>
+							</label>
 						</div>
 					</div>
 					<div class="row">
@@ -290,6 +324,47 @@ templ Page(v ViewData) {
 				})();
 			</script>
 			<script>
+				/* ===== new: flag helper =====
+				   Condition: a flag is drawn ONLY when "lang" is exactly 2 letters (a-z).
+				   Empty, missing or any other value -> no flag, nothing breaks. */
+				window.bbFlag = (function () {
+					// language style codes that are not country codes
+					var ALIAS = { en: "gb", uk: "gb", ja: "jp", zh: "cn", ko: "kr", sv: "se", da: "dk",
+						el: "gr", cs: "cz", hi: "in", he: "il", vi: "vn", et: "ee", sl: "si" };
+
+					// "Fr " -> "fr", anything that is not 2 letters -> ""
+					function valid(lang) {
+						var s = String(lang === undefined || lang === null ? "" : lang).trim().toLowerCase();
+						return /^[a-z]{2}$/.test(s) ? s : "";
+					}
+					function country(lang) {
+						var v = valid(lang);
+						return v ? (ALIAS[v] || v) : "";
+					}
+					// returns an element, or null when there is no valid lang
+					function make(lang) {
+						var c = country(lang);
+						if (!c) return null;
+						var img = document.createElement("img");
+						img.className = "flag";
+						img.alt = c.toUpperCase();
+						img.title = c.toUpperCase();
+						img.width = 20; img.height = 15;
+						img.src = "https://flagcdn.com/w40/" + c + ".png";
+						// offline or unknown code -> small text badge instead of a broken image
+						img.onerror = function () {
+							var b = document.createElement("span");
+							b.className = "flag flag-txt";
+							b.textContent = c.toUpperCase();
+							b.title = c.toUpperCase();
+							if (img.parentNode) img.parentNode.replaceChild(b, img);
+						};
+						return img;
+					}
+					return { valid: valid, country: country, make: make };
+				})();
+			</script>
+			<script>
 				/* ===== added: Paste / Build tabs ===== */
 				(function () {
 					var f = document.getElementById("f");
@@ -303,7 +378,7 @@ templ Page(v ViewData) {
 
 					var state = { bet_name: "", bet: 1, groups: [] };
 
-					function emptyTeam() { return { name: "", odd: "" }; }
+					function emptyTeam() { return { name: "", odd: "", lang: "" }; }
 					function emptyGroup() { return [emptyTeam(), emptyTeam()]; }
 
 					function showTab(tab) {
@@ -325,7 +400,8 @@ templ Page(v ViewData) {
 									return g.map(function (t) {
 										return {
 											name: (t.name !== undefined && t.name !== null) ? t.name : "",
-											odd: (t.odd !== undefined && t.odd !== null) ? t.odd : ""
+											odd: (t.odd !== undefined && t.odd !== null) ? t.odd : "",
+											lang: (t.lang !== undefined && t.lang !== null) ? t.lang : ""
 										};
 									});
 								});
@@ -352,7 +428,11 @@ templ Page(v ViewData) {
 											return String(t.name).trim() !== "" && t.odd !== "" && !isNaN(parseFloat(t.odd));
 										})
 										.map(function (t) {
-											return { name: String(t.name).trim(), odd: parseFloat(t.odd) };
+											var o = { name: String(t.name).trim(), odd: parseFloat(t.odd) };
+											// lang is written only when it is a valid 2 letter code
+											var lg = window.bbFlag.valid(t.lang);
+											if (lg) o.lang = lg;
+											return o;
 										});
 								})
 								.filter(function (g) { return g.length; })
@@ -397,6 +477,14 @@ templ Page(v ViewData) {
 								o.value = team.odd;
 								o.oninput = function () { team.odd = o.value; sync(); };
 
+								var l = document.createElement("input");
+								l.type = "text";
+								l.maxLength = 2;
+								l.placeholder = "fr";
+								l.title = "Flag: 2 letter code (fr, us, br, en ...). Leave empty for no flag.";
+								l.value = team.lang || "";
+								l.oninput = function () { team.lang = l.value; sync(); };
+
 								var x = document.createElement("button");
 								x.type = "button";
 								x.className = "bb-small bb-x";
@@ -405,6 +493,7 @@ templ Page(v ViewData) {
 
 								row.appendChild(n);
 								row.appendChild(o);
+								row.appendChild(l);
 								row.appendChild(x);
 								box.appendChild(row);
 							});
@@ -471,6 +560,8 @@ templ Page(v ViewData) {
 								el.innerHTML = "<b></b><span></span>";
 								el.firstChild.textContent = t.name;
 								el.lastChild.textContent =  t.odd;
+								var fl = window.bbFlag.make(t.lang); // null when no valid lang
+								if (fl) el.firstChild.insertBefore(fl, el.firstChild.firstChild);
 								el.onclick = function () {
 									// one bet per group
 									g.forEach(function (_, k) { delete picks[gi + ":" + k]; });
@@ -505,6 +596,20 @@ templ Page(v ViewData) {
 						"#d4a017", "#f032e6", "#4363d8", "#9a6324", "#808000"];
 					var CW = 170, GX = 60, NH = 44, GY = 70, LBL = 76; // GX = space for VS, GY = space for arrows
 					var saved = {}; // plan title -> selected rows, so picks survive tab switches
+					var langs = {}; // name -> lang, read from the JSON in the Paste box
+
+					function loadLangs() {
+						langs = {};
+						try {
+							var j = JSON.parse(document.getElementById("f").elements["html"].value || "{}");
+							(j.groups || []).forEach(function (g) {
+								(g || []).forEach(function (t) {
+									if (t && t.name !== undefined && window.bbFlag.valid(t.lang)) langs[String(t.name)] = t.lang;
+								});
+							});
+						} catch (e) {}
+					}
+					function flagFor(name) { return langs[name] ? window.bbFlag.make(langs[name]) : null; }
 
 					function el(tag, cls, text) {
 						var e = document.createElement(tag);
@@ -635,7 +740,10 @@ templ Page(v ViewData) {
 							nd.style.left = pos.x + "px";
 							nd.style.top = pos.y + "px";
 							nd.title = pos.name;
-							nd.appendChild(el("span", "", pos.name));
+							var sp = el("span", "", pos.name);
+							var nf = flagFor(pos.name);
+							if (nf) sp.insertBefore(nf, sp.firstChild);
+							nd.appendChild(sp);
 							var dots = el("div", "pg-dots");
 							nd.appendChild(dots);
 							// click a name: toggle every combo that passes through it
@@ -667,7 +775,14 @@ templ Page(v ViewData) {
 							var row = el("div", "pg-row");
 							row.style.setProperty("--c", col);
 							row.appendChild(el("span", "pg-chip"));
-							row.appendChild(el("span", "", r.names.join("  \u2192  ")));
+							var nmEl = el("span", "");
+							r.names.forEach(function (n, i) {
+								if (i > 0) nmEl.appendChild(document.createTextNode("  \u2192  "));
+								var rf = flagFor(n);
+								if (rf) nmEl.appendChild(rf);
+								nmEl.appendChild(document.createTextNode(n));
+							});
+							row.appendChild(nmEl);
 							row.appendChild(el("span", "pg-num", r.odd));
 							row.appendChild(el("span", "pg-num", r.chance));
 							row.appendChild(el("span", "pg-num", r.price));
@@ -777,6 +892,7 @@ templ Page(v ViewData) {
 
 					function show() {
 						box.innerHTML = ""; msg.textContent = "";
+						loadLangs();
 						var plans = readPlans();
 						if (!plans.length) {
 							msg.textContent = "No results yet. Press Analyze first, then open this tab.";
@@ -808,6 +924,100 @@ templ Page(v ViewData) {
 					}
 
 					document.querySelector('.bb-tab[data-tab="plans"]').addEventListener("click", show);
+				})();
+			</script>
+			<script>
+				/* ===== new: Convert tab (HTML -> JSON, runs in the browser, no server route needed) ===== */
+				(function () {
+					var f = document.getElementById("f");
+					var inEl = document.getElementById("cv-in");
+					var outEl = document.getElementById("cv-out");
+					var msg = document.getElementById("cv-msg");
+					var go = document.getElementById("cv-go");
+
+					function say(text, ok) {
+						msg.textContent = text;
+						msg.classList.toggle("cv-ok", !!ok);
+					}
+
+					function txt(e) { return ((e && e.textContent) || "").replace(/\s+/g, " ").trim(); }
+
+					// read the fight cards straight from the pasted page HTML
+					function parseHtml(raw, withDraw) {
+						var doc = new DOMParser().parseFromString(raw, "text/html");
+						var cards = doc.querySelectorAll(".ufc-fight-card");
+						if (!cards.length) return null;
+
+						var betName = "";
+						var link = doc.querySelector("a.ufc-fight-card__link");
+						if (link) {
+							var m = (link.getAttribute("href") || "").match(/\/\d+-([^\/]+)\//);
+							if (m) betName = m[1].replace(/-/g, " ");
+						}
+
+						var groups = [];
+						cards.forEach(function (card) {
+							var names = card.querySelectorAll(".ufc-fighter__name");
+							if (names.length < 2) return;
+							var odds = {};
+							card.querySelectorAll(".ufc-fight-markets__market").forEach(function (mk) {
+								var n = mk.querySelector(".ufc-fight-markets__name");
+								var v = mk.querySelector(".ui-market__value");
+								if (n && v) odds[txt(n)] = parseFloat(txt(v));
+							});
+							if (!(odds.W1 > 0) || !(odds.W2 > 0)) return;
+							var g = [{ name: txt(names[0]), odd: odds.W1 }];
+							if (withDraw && odds.X > 0) g.push({ name: "Draw", odd: odds.X });
+							g.push({ name: txt(names[1]), odd: odds.W2 });
+							groups.push(g);
+						});
+						return { bet_name: betName, bet: 1, groups: groups };
+					}
+
+					go.onclick = function () {
+						var raw = inEl.value.trim();
+						if (!raw) { say("Paste some HTML first."); return; }
+						outEl.value = "";
+
+						// already JSON? just tidy it
+						if (raw.charAt(0) === "{") {
+							try {
+								outEl.value = JSON.stringify(JSON.parse(raw), null, 2);
+								say("That was already JSON.", true);
+								return;
+							} catch (e) {}
+						}
+
+						var res = parseHtml(raw, document.getElementById("cv-draw").checked);
+						if (!res) { say("No fight cards found. Paste the full block that contains the ufc-fight-card elements."); return; }
+						if (!res.groups.length) { say("Found the cards but no W1 / W2 odds in them."); return; }
+						outEl.value = JSON.stringify(res, null, 2);
+						say("Done: " + res.groups.length + " fights found.", true);
+					};
+
+					document.getElementById("cv-copy").onclick = function () {
+						if (!outEl.value) { say("Nothing to copy yet."); return; }
+						outEl.select();
+						try { document.execCommand("copy"); say("Copied.", true); }
+						catch (e) { say("Copy failed, select the text and copy it by hand."); }
+					};
+
+					// send the JSON to the Paste box (and the Build / Graph / Analyze flow) and jump there
+					document.getElementById("cv-use").onclick = function () {
+						if (!outEl.value) { say("Convert something first."); return; }
+						f.elements["html"].value = outEl.value;
+						f.elements["html"].dispatchEvent(new Event("input", { bubbles: true }));
+						document.querySelector('.bb-tab[data-tab="paste"]').click();
+					};
+
+					document.getElementById("cv-clear").onclick = function () {
+						inEl.value = ""; outEl.value = ""; say("");
+					};
+
+					// Enter should never submit the main form from this tab
+					document.querySelector('[data-panel="convert"]').addEventListener("keydown", function (e) {
+						if (e.key === "Enter" && e.target.tagName !== "TEXTAREA") e.preventDefault();
+					});
 				})();
 			</script>
 		</body>
