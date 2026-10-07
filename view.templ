@@ -63,7 +63,7 @@ templ Page(v ViewData) {
 				.note { font-size:12px; opacity:.8; border-left:4px solid var(--line); padding-left:10px; margin-top:20px; }
 
 				/* ===== added: Paste / Build tabs ===== */
-				.bb-tabs { display:flex; gap:0; margin-bottom:8px; }
+				.bb-tabs { display:flex; gap:0; margin-bottom:8px; flex-wrap:wrap; }
 				.bb-tab {
 					padding:8px 16px; background:var(--bg); color:var(--fg);
 					border:1px solid var(--line); font-size:12px;
@@ -158,6 +158,85 @@ templ Page(v ViewData) {
 					color:var(--fg); border:1px solid var(--line); }
 				.pg-sub.active { background:var(--accent); color:#fff; border-color:var(--accent); }
 				.pg-sub.active:hover { background:var(--accent); color:#fff; }
+
+				/* ===== new: Cover tab (starter + ender + box) ===== */
+				.cb-bar { display:flex; gap:8px; flex-wrap:wrap; align-items:flex-end; margin:0 0 10px; }
+				.cb-bar label { min-width:130px; flex:0 1 160px; }
+				.cb-pair { border:1px solid var(--line); background:var(--block); margin:0 0 14px; }
+				.cb-title { margin:0; padding:8px 10px; font-size:15px; background:var(--accent); color:#fff;
+					display:flex; justify-content:space-between; align-items:center; gap:8px; }
+				.cb-title .bb-x { padding:6px 10px; }
+				.cb-ctl { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:8px;
+					padding:8px 10px; align-items:end; }
+				.cb-res { padding:8px 10px; font-size:13px; font-weight:700; border-top:1px solid var(--line);
+					background:var(--bg); min-height:2.4em; }
+				.cb-node { position:absolute; width:150px; height:48px; border:2px solid var(--line);
+					background:var(--block); text-align:center; font-size:12px; font-weight:700; line-height:1.2;
+					display:flex; flex-direction:column; align-items:center; justify-content:center;
+					cursor:pointer; user-select:none; z-index:1; overflow:hidden; padding:2px 4px; }
+				.cb-node small { font-weight:400; opacity:.85; font-size:11px; }
+				.cb-node:hover { border-color:var(--accent); }
+				.cb-node.fav { border-style:dashed; }
+				.cb-node.pick { background:var(--accent); color:#fff; border-color:var(--accent); }
+				.cb-node.boxn { border-style:dashed; border-color:var(--ok); cursor:default; }
+				.cb-node.boxn.w { background:var(--ok); color:#fff; }
+				.cb-node.boxn.l { border-color:var(--bad); }
+				.cb-row { display:grid; grid-template-columns:14px minmax(160px,1fr) 64px 84px 76px 76px 56px; gap:10px;
+					align-items:center; padding:6px 10px; border-top:1px solid var(--line);
+					background:var(--bg); font-size:13px; min-width:640px; }
+				.cb-row.cb-sc { cursor:pointer; grid-template-columns:minmax(200px,1fr) minmax(120px,1fr) 80px 80px; }
+				.cb-row.cb-sc:hover { background:var(--block); }
+				.cb-row.cb-sc.on { background:var(--block); box-shadow:inset 4px 0 0 var(--accent); }
+				.cb-row.w { box-shadow:inset 4px 0 0 var(--ok); }
+				.cb-row.l { box-shadow:inset 4px 0 0 var(--bad); }
+				.cb-row input { padding:4px 6px; text-align:right; }
+				.cb-sub { margin:0; padding:6px 10px; font-size:11px; font-weight:700; text-transform:uppercase;
+					background:var(--head); color:var(--head-fg); }
+				.cb-tag { font-size:11px; font-weight:700; text-align:center; }
+				.cb-boxes { display:flex; flex-wrap:wrap; gap:8px; }
+				.cb-item { border:2px dashed var(--ok); background:var(--bg); padding:8px 10px; font-size:13px; min-width:170px; }
+				.cb-item b { display:block; }
+				.cb-item small { display:block; opacity:.8; }
+				.cb-item.left { border-color:var(--line); }
+
+				.cb-2col { grid-template-columns:1fr 1fr; }
+				.cb-wage { width:90px; padding:4px 6px; }
+				.cb-left { border-left:1px solid var(--line); background:var(--bg); vertical-align:middle; min-width:150px; }
+				.cb-left b { display:block; }
+				.cb-money { font-weight:700; margin-top:4px; }
+				.cb-pair tr.w td { background:rgba(60,180,75,.18); }
+				.cb-pair tr.l td { background:rgba(230,25,75,.10); }
+				td.cb-left.w { background:rgba(60,180,75,.18); }
+				td.cb-left.l { background:rgba(230,25,75,.10); }
+				.cb-hint { padding:6px 10px 0; }
+
+				.cb-body { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); align-items:start;
+					border-top:1px solid var(--line); }
+				.cb-leftcol { border-right:1px solid var(--line); max-width:100%; }
+				.cb-leftcol .pg-wrap { border:0; }
+				.cb-right { min-width:0; }
+				.cb-right .table-wrap table { border:0; }
+				.cb-right .cb-wage { width:72px; }
+				.cb-pair tr.cb-lo td { border-top:2px solid var(--line); }
+				.cb-chk { width:auto; }
+				@media (max-width:820px) {
+					.cb-body { grid-template-columns:minmax(0,1fr); }
+					.cb-leftcol { border-right:0; border-bottom:1px solid var(--line); }
+				}
+
+				.cb-node.boxn { cursor:pointer; }
+				tr.cb-click { cursor:pointer; }
+				tr.cb-click:hover td { background:var(--block); }
+				tr.cb-click.w td { background:rgba(60,180,75,.18); }
+				tr.cb-click.l td { background:rgba(230,25,75,.10); }
+
+				tr.cb-total td { font-weight:700; border-top:2px solid var(--line); background:var(--block); }
+				.cb-leftcol .pg-canvas { margin:0 auto; }
+
+				.cb-node.boxn, .cb-node.boxn.pick { background:rgba(230,25,75,.16); color:var(--fg);
+					border:2px solid rgba(230,25,75,.45); }
+				.cb-node.boxn.pick { background:rgba(230,25,75,.32); }
+				.cb-node.boxn.w { background:var(--ok); color:#fff; border-color:var(--ok); }
 			</style>
 		</head>
 		<body>
@@ -171,6 +250,7 @@ templ Page(v ViewData) {
 							<button type="button" class="bb-tab" data-tab="graph">Graph</button>
 							<button type="button" class="bb-tab" data-tab="plans">Plans</button>
 							<button type="button" class="bb-tab" data-tab="convert">Convert</button>
+							<button type="button" class="bb-tab" data-tab="cover">Cover</button>
 						</div>
 						<div data-panel="paste">
                         <label>
@@ -201,10 +281,10 @@ templ Page(v ViewData) {
 						<div data-panel="convert" hidden>
 							<label>
 								Page HTML
-								<textarea id="cv-in" rows="6" placeholder="Paste the page HTML here, then press Convert"></textarea>
+								<textarea id="cv-in" rows="6" placeholder="Paste the page HTML here (UFC or football), then press Convert"></textarea>
 							</label>
 							<div class="cv-bar">
-								<label class="cv-chk"><input type="checkbox" id="cv-draw"/> Include draw (X)</label>
+								<label class="cv-chk"><input type="checkbox" id="cv-draw"/> Include draw (X) (UFC only)</label>
 							</div>
 							<div class="cv-bar">
 								<button type="button" class="bb-small" id="cv-go">Convert to JSON</button>
@@ -217,6 +297,20 @@ templ Page(v ViewData) {
 								JSON result
 								<textarea id="cv-out" rows="10" readonly></textarea>
 							</label>
+						</div>
+						<div data-panel="cover" hidden>
+							<p class="pg-hint">Pick 2 or more fights per set: starters (odds close) and one ender (odds far, last). Graph on the left, result on the right. Edit any wage. Left over teams and Summary are at the bottom.</p>
+							<div class="cb-bar">
+								<label>Total budget $<input type="number" id="cb-total" min="0" step="any" value="10"/></label>
+								<label>Fights per set<select id="cb-k"><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option></select></label>
+								<button type="button" class="bb-small" id="cb-auto">Auto pair all</button>
+								<button type="button" class="bb-small" id="cb-add">+ Add set</button>
+								<label>Extra sets<input type="number" id="cb-extra" min="1" max="50" value="6"/></label>
+								<button type="button" class="bb-small" id="cb-reuse">+ Reuse fights (more sets)</button>
+								<button type="button" class="bb-small" id="cb-split">Auto split wage</button>
+							</div>
+							<div id="cb-box"></div>
+							<p class="bb-msg" id="cb-msg"></p>
 						</div>
 					</div>
 					<div class="row">
@@ -884,7 +978,7 @@ templ Page(v ViewData) {
 
 					var activePlan = 0; // which sub tab is open
 
-					// "#1 · fights 10, 13 · 4 combos = $4.00" -> "#1 · fights 10, 13"
+					// "#1 fights 10, 13  4 combos = $4.00" -> "#1 fights 10, 13"
 					function planLabel(p) {
 						var parts = p.title.split(/\s*\u00b7\s*/);
 						return parts.length > 1 ? parts.slice(0, 2).join(" \u00b7 ") : p.title;
@@ -927,7 +1021,8 @@ templ Page(v ViewData) {
 				})();
 			</script>
 			<script>
-				/* ===== new: Convert tab (HTML -> JSON, runs in the browser, no server route needed) ===== */
+				/* ===== new: Convert tab (HTML -> JSON, runs in the browser, no server route needed) =====
+				   Supports: UFC fight cards (W1 / X / W2) and football pages (Over / Under only). */
 				(function () {
 					var f = document.getElementById("f");
 					var inEl = document.getElementById("cv-in");
@@ -942,9 +1037,8 @@ templ Page(v ViewData) {
 
 					function txt(e) { return ((e && e.textContent) || "").replace(/\s+/g, " ").trim(); }
 
-					// read the fight cards straight from the pasted page HTML
-					function parseHtml(raw, withDraw) {
-						var doc = new DOMParser().parseFromString(raw, "text/html");
+					// UFC: read the fight cards straight from the pasted page HTML
+					function parseUfc(doc, withDraw) {
 						var cards = doc.querySelectorAll(".ufc-fight-card");
 						if (!cards.length) return null;
 
@@ -971,7 +1065,71 @@ templ Page(v ViewData) {
 							g.push({ name: txt(names[1]), odd: odds.W2 });
 							groups.push(g);
 						});
-						return { bet_name: betName, bet: 1, groups: groups };
+						return { bet_name: betName, bet: 1, groups: groups, skipped: 0, kind: "ufc" };
+					}
+
+					// football: only Over / Under totals, one group per match
+					function parseFootball(doc) {
+						var games = doc.querySelectorAll(".dashboard-game");
+						if (!games.length) return null;
+
+						var champ = doc.querySelector(".dashboard-champ-name__caption");
+						var betName = champ ? txt(champ).toLowerCase() : "football";
+
+						var groups = [], seen = {}, skipped = 0;
+						games.forEach(function (game) {
+							var tn = game.querySelectorAll(".dashboard-game-team-info__name");
+							if (tn.length < 2) return;
+							var home = txt(tn[0]), away = txt(tn[1]);
+
+							// aggregate rows: "Home (Special bets)", "Home / Away 10 Matches"
+							var extra = game.querySelector(".dashboard-game-info__additional-info");
+							if (/special bets/i.test(home + " " + away) || (extra && /matches/i.test(txt(extra)))) {
+								skipped++; return;
+							}
+
+							// same match pasted twice -> keep once
+							var link = game.querySelector("a.dashboard-game-block__link");
+							var id = link ? link.getAttribute("href") : home + "|" + away;
+							if (seen[id]) return;
+							seen[id] = 1;
+
+							// collect every Over/Under cell, grouped by line (2.5, 3.5 ...)
+							var lines = {}, order = [];
+							game.querySelectorAll(".dashboard-markets__market").forEach(function (mk) {
+								if (mk.classList.contains("ui-market--locked") || mk.classList.contains("ui-market--empty")) return;
+								var btn = mk.querySelector(".ui-market__toggle");
+								var label = (btn && btn.getAttribute("aria-label")) || "";
+								var m = label.match(/^(Over|Under)\s+(\d+(?:\.\d+)?)$/i);
+								if (!m) return;                       // W1 / X / W2 / 1X / 12 / 2X -> ignored
+								var val = parseFloat(txt(mk.querySelector(".ui-market__value")));
+								if (!(val > 1)) return;
+								var line = m[2], side = m[1].toLowerCase();
+								if (!lines[line]) { lines[line] = {}; order.push(line); }
+								lines[line][side] = val;
+							});
+
+							// need a line that has BOTH sides
+							var pick = null;
+							for (var i = 0; i < order.length; i++) {
+								if (lines[order[i]].over && lines[order[i]].under) { pick = order[i]; break; }
+							}
+							if (!pick) { skipped++; return; }
+
+							var base = home + " - " + away;
+							groups.push([
+								{ name: base + " Over " + pick, odd: lines[pick].over },
+								{ name: base + " Under " + pick, odd: lines[pick].under }
+							]);
+						});
+						return { bet_name: betName, bet: 1, groups: groups, skipped: skipped, kind: "football" };
+					}
+
+					// auto detect: UFC cards first, then football
+					function parseHtml(raw, withDraw) {
+						var doc = new DOMParser().parseFromString(raw, "text/html");
+						if (doc.querySelector(".ufc-fight-card")) return parseUfc(doc, withDraw);
+						return parseFootball(doc);
 					}
 
 					go.onclick = function () {
@@ -989,10 +1147,15 @@ templ Page(v ViewData) {
 						}
 
 						var res = parseHtml(raw, document.getElementById("cv-draw").checked);
-						if (!res) { say("No fight cards found. Paste the full block that contains the ufc-fight-card elements."); return; }
-						if (!res.groups.length) { say("Found the cards but no W1 / W2 odds in them."); return; }
+						if (!res) { say("Nothing recognised. Paste the full block with ufc-fight-card (UFC) or dashboard-game (football) elements."); return; }
+						if (!res.groups.length) { say(res.kind === "football"
+							? "Found matches but none has an Over/Under pair (skipped " + res.skipped + ")."
+							: "Found the cards but no W1 / W2 odds in them."); return; }
+						var kind = res.kind, skipped = res.skipped;
+						delete res.kind; delete res.skipped;       // keep the JSON clean
 						outEl.value = JSON.stringify(res, null, 2);
-						say("Done: " + res.groups.length + " fights found.", true);
+						say("Done: " + res.groups.length + (kind === "football" ? " matches (Over/Under only)" : " fights found")
+							+ (skipped ? ", skipped " + skipped + " rows" : "") + ".", true);
 					};
 
 					document.getElementById("cv-copy").onclick = function () {
@@ -1019,6 +1182,1049 @@ templ Page(v ViewData) {
 						if (e.key === "Enter" && e.target.tagName !== "TEXTAREA") e.preventDefault();
 					});
 				})();
+			</script>
+			<script>
+/* ===== new: Cover tab (sets of 2 or more fights) =====
+   Set = 2..6 fights. The LAST fight is the ENDER (odds far), all the others are STARTERS (odds close).
+   Bets: every combination of one side per starter, chained with every ender side that is not
+         the favorite, plus the ender favorite alone (left over). Exactly ONE bet of a set wins. */
+(function () {
+	var f = document.getElementById("f");
+	var ta = f.elements["html"];
+	var box = document.getElementById("cb-box");
+	var msg = document.getElementById("cb-msg");
+	var totalEl = document.getElementById("cb-total");
+	var kEl = document.getElementById("cb-k");
+	var NS = "http://www.w3.org/2000/svg";
+	var COLORS = ["#e6194b", "#f58231", "#911eb4", "#0abab5", "#d4a017",
+		"#f032e6", "#4363d8", "#9a6324", "#808000", "#3cb44b"];
+	var CW = 130, NH = 48, GX = 30, GY = 80, LBL = 74;
+	var MAXK = 6;
+
+	var groups = [];   // [{n: fight number, outs: [{name, odd, lang}]}]
+	var pairs = [];    // the sets (name kept short)
+	var sig = "";
+	var sumRows = [];
+
+	function el(tag, cls, text) {
+		var e = document.createElement(tag);
+		if (cls) e.className = cls;
+		if (text !== undefined) e.textContent = text;
+		return e;
+	}
+	function svgEl(tag, attrs) {
+		var e = document.createElementNS(NS, tag);
+		for (var k in attrs) e.setAttribute(k, attrs[k]);
+		return e;
+	}
+	function cssv(n, fb) {
+		var v = getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+		return v || fb;
+	}
+	function plain(x) { return "$" + x.toFixed(2); }
+	function say(t) { msg.textContent = t || ""; }
+	function kCount() {
+		var k = parseInt(kEl.value, 10) || 2;
+		return Math.max(2, Math.min(MAXK, k, groups.length || 2));
+	}
+
+	function readGroups() {
+		var j;
+		try { j = JSON.parse(ta.value.trim() || "{}"); }
+		catch (e) { return "Paste box is not valid JSON (use Convert first)."; }
+		groups = [];
+		(j.groups || []).forEach(function (g, i) {
+			var outs = (g || []).map(function (t) {
+				return { name: String(t.name), odd: parseFloat(t.odd), lang: t.lang };
+			}).filter(function (t) { return t.odd > 0; });
+			if (outs.length >= 2) groups.push({ n: i + 1, outs: outs });
+		});
+		if (groups.length < 2) return "Need at least 2 fights with odds in the Paste box.";
+		return "";
+	}
+
+	function ratio(g) {
+		var mx = 0, mn = Infinity;
+		g.outs.forEach(function (o) { mx = Math.max(mx, o.odd); mn = Math.min(mn, o.odd); });
+		return mx / mn;
+	}
+	function label(gi) {
+		var g = groups[gi];
+		return g.n + ".  " + g.outs.map(function (o) { return o.name + " " + o.odd; }).join("  |  ");
+	}
+	function lastG(p) { return groups[p.f[p.f.length - 1]]; }
+
+	// fair chance of every side (bookmaker margin removed)
+	function fair(outs) {
+		var inv = 0;
+		outs.forEach(function (o) { inv += 1 / o.odd; });
+		return outs.map(function (o) { return (1 / o.odd) / inv; });
+	}
+	function pct(x) { return (x * 100).toFixed(1) + "%"; }
+	var chainWage = 1;
+	var chainUI = null;
+	var grandUI = null;
+
+	function makeBets(p) {
+		var n = p.f.length;
+		var F = p.f.map(function (gi) { return groups[gi].outs; });
+		var E = F[n - 1], S = F.slice(0, n - 1);
+		var fav = 0;
+		E.forEach(function (o, i) { if (o.odd < E[fav].odd) fav = i; });
+		p.fav = fav;
+		p.pF = F.map(fair);
+		p.bets = [];
+		var combos = [[]];
+		S.forEach(function (outs) {
+			var next = [];
+			combos.forEach(function (c) { outs.forEach(function (o, oi) { next.push(c.concat(oi)); }); });
+			combos = next;
+		});
+		combos.forEach(function (c) {
+			E.forEach(function (eo, ei) {
+				if (ei === fav) return;
+				var odd = eo.odd, ch = p.pF[n - 1][ei], names = [];
+				c.forEach(function (oi, l) { odd *= S[l][oi].odd; ch *= p.pF[l][oi]; names.push(S[l][oi].name); });
+				names.push(eo.name);
+				p.bets.push({ kind: "parlay", combo: c, ei: ei, odd: odd, chance: ch, label: names.join(" - ") });
+			});
+		});
+		p.bets.push({ kind: "cover", combo: [], ei: fav, odd: E[fav].odd, chance: p.pF[n - 1][fav], label: E[fav].name });
+		p.bets.forEach(function (b, i) { b.color = COLORS[i % COLORS.length]; });
+	}
+	// equal payout split of the budget (you can change every wage by hand afterwards)
+	function split(p) {
+		var inv = 0;
+		p.bets.forEach(function (b) { inv += 1 / b.odd; });
+		var P = p.bud / inv;
+		p.stakes = p.bets.map(function (b) { return Math.round(P / b.odd * 100) / 100; });
+	}
+	function reset(p) {
+		p.sel = [];
+		for (var i = 0; i < p.f.length - 1; i++) p.sel.push(-1);
+		p.se = -1; p.win = -1;
+		makeBets(p);
+		split(p);
+	}
+	function newPair(arr) {
+		var p = { f: arr.slice(), sel: [], se: -1, win: -1, bud: 0 };
+		p.bud = (parseFloat(totalEl.value) || 0) / Math.max(1, Math.floor(groups.length / arr.length));
+		reset(p);
+		return p;
+	}
+	function byRatio() {
+		var order = groups.map(function (g, i) { return i; });
+		order.sort(function (a, b) { return ratio(groups[a]) - ratio(groups[b]); });
+		return order;
+	}
+	// each set takes (k-1) close fights from the low end and 1 far fight from the high end
+	function autoPairs() {
+		var k = kCount();
+		var order = byRatio();
+		pairs = [];
+		var lo = 0, hi = order.length - 1;
+		while (hi - lo + 1 >= k) {
+			var arr = [];
+			for (var i = 0; i < k - 1; i++) arr.push(order[lo + i]);
+			arr.push(order[hi]);
+			lo += k - 1; hi--;
+			pairs.push(newPair(arr));
+		}
+		var n = pairs.length || 1;
+		var each = (parseFloat(totalEl.value) || 0) / n;
+		pairs.forEach(function (p) { p.bud = each; split(p); });
+	}
+	function winnerIdx(p) {
+		if (p.se < 0) return -1;
+		if (p.se === p.fav) return p.bets.length - 1;
+		for (var s = 0; s < p.sel.length; s++) if (p.sel[s] < 0) return -1;
+		for (var i = 0; i < p.bets.length; i++) {
+			var b = p.bets[i];
+			if (b.kind !== "parlay" || b.ei !== p.se) continue;
+			var ok = true;
+			for (var l = 0; l < b.combo.length; l++) if (b.combo[l] !== p.sel[l]) { ok = false; break; }
+			if (ok) return i;
+		}
+		return -1;
+	}
+	function flagInto(parent, lang) {
+		var fl = window.bbFlag.make(lang);
+		if (fl) parent.appendChild(fl);
+	}
+	function curScenario(p) {
+		return { sel: p.sel, se: p.se, win: p.win, full: p.win >= 0 };
+	}
+	// exactly ONE bet wins, every other bet of the set loses
+	function syncWin(p) { p.win = winnerIdx(p); }
+	function pickBet(p, bi) {
+		var b = p.bets[bi];
+		if (p.win === bi) {
+			p.win = -1; p.se = -1;
+			p.sel = p.sel.map(function () { return -1; });
+		} else {
+			p.win = bi;
+			if (b.kind === "parlay") { p.sel = b.combo.slice(); p.se = b.ei; }
+			else { p.se = p.fav; p.sel = p.sel.map(function () { return -1; }); }
+		}
+		update(p);
+	}
+
+	function wageInput(p, bi) {
+		var inp = document.createElement("input");
+		inp.type = "number"; inp.min = "0"; inp.step = "any"; inp.value = p.stakes[bi];
+		inp.className = "cb-wage";
+		inp.onclick = function (e) { e.stopPropagation(); };
+		(p.inputs[bi] = p.inputs[bi] || []).push(inp);
+		inp.oninput = function () {
+			p.stakes[bi] = parseFloat(inp.value) || 0;
+			p.inputs[bi].forEach(function (o) { if (o !== inp) o.value = inp.value; });
+			update(p);
+		};
+		return inp;
+	}
+	function setAllInputs(p) {
+		p.inputs.forEach(function (arr, i) {
+			if (arr) arr.forEach(function (o) { o.value = p.stakes[i]; });
+		});
+	}
+	// name of a bet with flags, into a table cell
+	function betNames(p, b, parent) {
+		var n = p.f.length;
+		var F = p.f.map(function (gi) { return groups[gi].outs; });
+		b.combo.forEach(function (oi, l) {
+			flagInto(parent, F[l][oi].lang);
+			parent.appendChild(document.createTextNode(F[l][oi].name + "  -  "));
+		});
+		flagInto(parent, F[n - 1][b.ei].lang);
+		parent.appendChild(document.createTextNode(F[n - 1][b.ei].name));
+	}
+
+	function buildPair(p, pi) {
+		var n = p.f.length;
+		var F = p.f.map(function (gi) { return groups[gi].outs; });
+		var E = F[n - 1];
+		p.inputs = [];
+		var maxc = 1;
+		F.forEach(function (o) { maxc = Math.max(maxc, o.length); });
+		var innerW = maxc * CW + (maxc - 1) * GX;
+		var W = LBL + innerW + 10;
+		var H = n * NH + (n - 1) * GY + 10;
+		function xs(cnt, k) { return LBL + (innerW - (cnt * CW + (cnt - 1) * GX)) / 2 + k * (CW + GX); }
+		p.pos = F.map(function (outs, l) {
+			return outs.map(function (o, k) { return { x: xs(outs.length, k), y: l * (NH + GY) }; });
+		});
+
+		var root = el("section", "cb-pair");
+		var title = el("h3", "cb-title");
+		title.appendChild(el("span", "", "Set " + (pi + 1) + (p.extra ? " (reuse)" : "") + "  \u00b7  " + n + " fights  \u00b7  " + p.bets.length + " bets"));
+		var rm = el("button", "bb-small bb-x", "Remove");
+		rm.type = "button";
+		rm.onclick = function () { pairs.splice(pi, 1); renderAll(); };
+		title.appendChild(rm);
+		root.appendChild(title);
+
+		// one select per fight: starters first, ender last
+		var two = el("div", "cb-ctl");
+		function sel(textLbl, cur, idx) {
+			var lb = el("label", "", textLbl);
+			var s = document.createElement("select");
+			groups.forEach(function (g, gi) {
+				var o = document.createElement("option");
+				o.value = gi; o.textContent = label(gi);
+				if (gi === cur) o.selected = true;
+				s.appendChild(o);
+			});
+			s.onchange = function () {
+				var v = parseInt(s.value, 10);
+				if (p.f.some(function (x, i) { return i !== idx && x === v; })) {
+					say("A fight can be used only once in a set."); renderAll(); return;
+				}
+				say(""); p.f[idx] = v; reset(p); renderAll();
+			};
+			lb.appendChild(s);
+			return lb;
+		}
+		p.f.forEach(function (gi, i) {
+			two.appendChild(sel(i < n - 1 ? "Starter " + (i + 1) + " (odds close)" : "Ender (odds far)", gi, i));
+		});
+		root.appendChild(two);
+
+		var ctl = el("div", "cb-ctl");
+		var budLb = el("label", "", "Budget $ (auto split)");
+		var budIn = document.createElement("input");
+		budIn.type = "number"; budIn.min = "0"; budIn.step = "any"; budIn.value = p.bud;
+		budLb.appendChild(budIn);
+		ctl.appendChild(budLb);
+		var swap = el("button", "bb-small", "Swap first starter / ender");
+		swap.type = "button";
+		swap.onclick = function () {
+			var t = p.f[0]; p.f[0] = p.f[n - 1]; p.f[n - 1] = t; reset(p); renderAll();
+		};
+		ctl.appendChild(swap);
+		var flip = el("button", "bb-small", "Flip ender");
+		flip.type = "button";
+		flip.onclick = function () {
+			// next fight of the set becomes the ender
+			var nx = p.f[0];
+			applyEnder(p, nx);
+		};
+		ctl.appendChild(flip);
+		var bf = el("button", "bb-small", "Best flip");
+		bf.type = "button";
+		bf.onclick = function () { applyEnder(p, bestFlip(p).gi); };
+		ctl.appendChild(bf);
+		var add = el("button", "bb-small", "+ Starter");
+		add.type = "button";
+		add.onclick = function () {
+			if (n >= MAXK) { say("A set can have at most " + MAXK + " fights."); return; }
+			var best = -1;
+			groups.forEach(function (g, gi) {
+				if (p.f.indexOf(gi) >= 0) return;
+				if (best < 0 || ratio(g) < ratio(groups[best])) best = gi;
+			});
+			if (best < 0) { say("No free fight left."); return; }
+			say(""); p.f.splice(n - 1, 0, best); reset(p); renderAll();
+		};
+		ctl.appendChild(add);
+		var sub = el("button", "bb-small", "- Starter");
+		sub.type = "button";
+		sub.onclick = function () {
+			if (n <= 2) { say("A set needs at least 2 fights."); return; }
+			say(""); p.f.splice(n - 2, 1); reset(p); renderAll();
+		};
+		ctl.appendChild(sub);
+		root.appendChild(ctl);
+
+		// body: graph in the left column, result in the right column
+		var body = el("div", "cb-body");
+
+		var left = el("div", "cb-leftcol");
+		var wrap = el("div", "pg-wrap");
+		var canvas = el("div", "pg-canvas");
+		canvas.style.width = W + "px";
+		canvas.style.height = H + "px";
+		var svg = svgEl("svg", { "class": "pg-svg", width: W, height: H });
+		canvas.appendChild(svg);
+		for (var li = 0; li < n; li++) {
+			var lab = el("div", "pg-col", li < n - 1 ? "Starter " + (li + 1) : "Ender");
+			lab.style.left = "0px";
+			lab.style.top = (li * (NH + GY) + NH / 2 - 8) + "px";
+			lab.style.width = (LBL - 8) + "px";
+			canvas.appendChild(lab);
+		}
+		function mkNode(o, pos, cls) {
+			var nd = el("div", "cb-node " + cls);
+			nd.style.left = pos.x + "px";
+			nd.style.top = pos.y + "px";
+			nd.title = o.name;
+			var b = el("span", "");
+			flagInto(b, o.lang);
+			b.appendChild(document.createTextNode(o.name));
+			nd.appendChild(b);
+			nd.appendChild(el("small", "", cls === "boxn" ? "left over \u00b7 " + o.odd : String(o.odd)));
+			canvas.appendChild(nd);
+			return nd;
+		}
+		var sNodes = [];
+		for (var l2 = 0; l2 < n - 1; l2++) {
+			sNodes.push(F[l2].map(function (o, k) {
+				var l = l2;
+				var nd = mkNode(o, p.pos[l][k], "");
+				nd.onclick = function () { p.sel[l] = (p.sel[l] === k ? -1 : k); syncWin(p); update(p); };
+				return nd;
+			}));
+		}
+		// ender row: the other sides (the favorite is the soft red left over node)
+		var eNodes = [];
+		E.forEach(function (o, ei) {
+			if (ei === p.fav) return;
+			var nd = mkNode(o, p.pos[n - 1][ei], "");
+			nd.onclick = function () { p.se = (p.se === ei ? -1 : ei); syncWin(p); update(p); };
+			eNodes[ei] = nd;
+		});
+		// the left over team: marked soft red, next to its own team, no arrows
+		var boxNode = mkNode(E[p.fav], p.pos[n - 1][p.fav], "boxn");
+		boxNode.onclick = function () { p.se = (p.se === p.fav ? -1 : p.fav); syncWin(p); update(p); };
+		wrap.appendChild(canvas);
+		left.appendChild(wrap);
+		left.appendChild(el("p", "pg-hint cb-hint", "Click one name in every starter row + an ender name (or the soft red left over): 1 bet wins (green), the others lose (red dashed). You can also click a row."));
+		body.appendChild(left);
+
+		// RESULT table (right column): bet | wage | total odd | money result
+		var right = el("div", "cb-right");
+		var tw = el("div", "table-wrap");
+		var tb = document.createElement("table");
+		var thead = document.createElement("thead");
+		var hr = document.createElement("tr");
+		["Bet", "Wage $", "Total odd", "Money result"].forEach(function (h) {
+			hr.appendChild(el("th", "", h));
+		});
+		thead.appendChild(hr);
+		tb.appendChild(thead);
+		var tbody = document.createElement("tbody");
+		var betEls = [];
+		p.bets.forEach(function (b, bi) {
+			var tr = document.createElement("tr");
+			tr.className = "cb-click";
+			tr.onclick = function () { pickBet(p, bi); };
+			var c0 = el("td", "", "");
+			var chip = el("span", "pg-chip");
+			chip.style.setProperty("--c", b.color);
+			chip.style.display = "inline-block";
+			chip.style.marginRight = "6px";
+			chip.style.verticalAlign = "middle";
+			c0.appendChild(chip);
+			if (b.kind === "parlay") {
+				betNames(p, b, c0);
+			} else {
+				c0.appendChild(document.createTextNode("Left over \u2193"));
+				tr.classList.add("cb-lo");
+			}
+			tr.appendChild(c0);
+			var c1 = el("td", ""); c1.appendChild(wageInput(p, bi)); tr.appendChild(c1);
+			tr.appendChild(el("td", "", b.odd.toFixed(2)));
+			var c3 = el("td", "cb-money", ""); tr.appendChild(c3);
+			tbody.appendChild(tr);
+			betEls[bi] = { row: tr, money: c3 };
+		});
+		tb.appendChild(tbody);
+		tw.appendChild(tb);
+		right.appendChild(tw);
+		body.appendChild(right);
+		root.appendChild(body);
+
+		budIn.onchange = function () {
+			p.bud = parseFloat(budIn.value) || 0;
+			split(p);
+			setAllInputs(p);
+			update(p);
+		};
+
+		p.ui = { root: root, svg: svg, sNodes: sNodes, eNodes: eNodes, boxNode: boxNode, bets: betEls, cases: [], caseRows: [] };
+	}
+
+	function paint(p) {
+		var n = p.f.length;
+		var svg = p.ui.svg;
+		while (svg.firstChild) svg.removeChild(svg.firstChild);
+		var defs = svgEl("defs", {});
+		svg.appendChild(defs);
+		var made = {};
+		var OK = cssv("--ok", "#0a7a32"), BAD = cssv("--bad", "#b00020"), BG = cssv("--bg", "#fff");
+		var uid = p.f.join("_");
+		function marker(col) {
+			var id = "cbm" + uid + "_" + col.replace(/[^a-z0-9]/gi, "");
+			if (!made[id]) {
+				made[id] = 1;
+				var m = svgEl("marker", { id: id, viewBox: "0 0 10 10", refX: "9", refY: "5",
+					markerWidth: "6", markerHeight: "6", orient: "auto" });
+				m.appendChild(svgEl("path", { d: "M0 0 L10 5 L0 10 z", fill: col }));
+				defs.appendChild(m);
+			}
+			return "url(#" + id + ")";
+		}
+		function lbl(x, y, col, text) {
+			var t = svgEl("text", { x: x, y: y, "text-anchor": "middle", "font-size": 11, "font-weight": 700 });
+			t.textContent = text;
+			t.style.fill = col;
+			t.style.stroke = BG;
+			t.style.strokeWidth = "3px";
+			t.style.paintOrder = "stroke";
+			svg.appendChild(t);
+		}
+		function addPath(d, col, w, op, dash) {
+			var path = svgEl("path", { d: d, fill: "none", "stroke-width": w, "stroke-opacity": op, "marker-end": marker(col) });
+			path.style.stroke = col;
+			if (dash) path.setAttribute("stroke-dasharray", dash);
+			svg.appendChild(path);
+		}
+		// one curve between two nodes of neighbour rows
+		function edge(a, b, off, col, w, op, dash, text) {
+			var x1 = a.x + CW / 2 + off, y1 = a.y + NH, x2 = b.x + CW / 2 + off, y2 = b.y, ym = (y1 + y2) / 2;
+			addPath("M" + x1 + " " + y1 + " C" + x1 + " " + ym + " " + x2 + " " + ym + " " + x2 + " " + y2, col, w, op, dash);
+			if (text) lbl((x1 + x2) / 2, ym + 4, col, text);
+		}
+		function pts(b) {
+			var a = [];
+			b.combo.forEach(function (oi, l) { a.push(p.pos[l][oi]); });
+			a.push(p.pos[n - 1][b.ei]);
+			return a;
+		}
+		var cur = curScenario(p);
+		var np = 0;
+		p.bets.forEach(function (b) { if (b.kind === "parlay") np++; });
+		var step = Math.min(4, 40 / Math.max(1, np));
+		var idx = 0;
+
+		// losers first, the winner on top
+		var order = [];
+		p.bets.forEach(function (b, bi) { if (b.kind === "parlay") order.push(bi); });
+		order.sort(function (a, b) { return (a === cur.win ? 1 : 0) - (b === cur.win ? 1 : 0); });
+		var rank = {};
+		p.bets.forEach(function (b, bi) { if (b.kind === "parlay") rank[bi] = idx++; });
+
+		order.forEach(function (bi) {
+			var b = p.bets[bi];
+			var off = (rank[bi] - (np - 1) / 2) * step;
+			var P = pts(b);
+			var stakeTxt = "x" + b.odd.toFixed(2) + " \u00b7 $" + (p.stakes[bi] || 0);
+			for (var s = 0; s < P.length - 1; s++) {
+				var last = s === P.length - 2;
+				if (!cur.full) edge(P[s], P[s + 1], off, b.color, 2.5, 0.9, "", "");
+				else if (bi === cur.win) edge(P[s], P[s + 1], 0, OK, 4, 1, "", last ? "WIN " + stakeTxt : "");
+				else edge(P[s], P[s + 1], off, BAD, 1.5, 0.35, "6 4", "");
+			}
+		});
+
+		var ci = p.bets.length - 1;
+		p.ui.sNodes.forEach(function (row, l) {
+			row.forEach(function (nd, k) { nd.classList.toggle("pick", cur.sel[l] === k); });
+		});
+		p.ui.eNodes.forEach(function (nd, ei) { if (nd) nd.classList.toggle("pick", cur.se === ei); });
+		p.ui.boxNode.classList.toggle("w", cur.full && cur.win === ci);
+		p.ui.boxNode.classList.toggle("l", cur.full && cur.win !== ci);
+	}
+
+	function updateSummary() {
+		var sum = 0;
+		pairs.forEach(function (p, pi) {
+			var r = sumRows[pi];
+			if (!r) return;
+			var total = 0;
+			p.stakes.forEach(function (x) { total += x; });
+			sum += total;
+			// every possible result pays exactly one bet
+			var mn = Infinity, mx = -Infinity;
+			p.bets.forEach(function (b, bi) {
+				var pay = (p.stakes[bi] || 0) * b.odd;
+				mn = Math.min(mn, pay); mx = Math.max(mx, pay);
+			});
+			r.total.textContent = plain(total);
+			r.min.textContent = plain(mn);
+			r.max.textContent = plain(mx);
+		});
+		var ch = chainInfo();
+		if (sumRows.chain) {
+			sumRows.chain.name.textContent = ch.n ? "Left over chain (" + ch.n + " teams)" : "Left over chain (none selected)";
+			sumRows.chain.total.textContent = plain(ch.n ? chainWage : 0);
+			sumRows.chain.min.textContent = plain(0);
+			sumRows.chain.max.textContent = plain(ch.n ? chainWage * ch.odd : 0);
+		}
+		if (ch.n) sum += chainWage;
+		if (sumRows.all) sumRows.all.textContent = plain(sum);
+		updateFinal();
+
+		if (grandUI) {
+			var gwage = 0, gmoney = 0, done = 0, used = 0;
+			pairs.forEach(function (p) {
+				if (p.pick === false) return;
+				used++;
+				p.stakes.forEach(function (x) { gwage += x; });
+				if (p.win >= 0) { done++; gmoney += (p.stakes[p.win] || 0) * p.bets[p.win].odd; }
+			});
+			grandUI.wage.textContent = plain(gwage);
+			grandUI.tag.textContent = done + " of " + used + " sets clicked";
+			grandUI.money.textContent = done ? plain(gmoney) : "-";
+		}
+	}
+
+	function update(p) {
+		var cur = curScenario(p);
+		p.bets.forEach(function (b, bi) {
+			var be = p.ui.bets[bi];
+			var pay = (p.stakes[bi] || 0) * b.odd;
+			be.row.classList.remove("w", "l");
+			if (cur.full) {
+				var win = bi === cur.win;
+				be.row.classList.add(win ? "w" : "l");
+				be.money.textContent = win ? plain(pay) : plain(0);
+			} else {
+				be.money.textContent = plain(pay);
+			}
+		});
+		p.ui.cases.forEach(function (c) {
+			var pay = (p.stakes[c.bi] || 0) * p.bets[c.bi].odd;
+			c.row.classList.remove("w", "l");
+			if (cur.full) {
+				var win = c.bi === cur.win;
+				c.row.classList.add(win ? "w" : "l");
+				c.tag.textContent = win ? "WIN" : "LOSE";
+				c.tag.className = "cb-tag " + (win ? "win" : "loss");
+				c.el.textContent = win ? plain(pay) : plain(0);
+			} else {
+				c.tag.textContent = "";
+				c.el.textContent = plain(pay);
+			}
+		});
+		if (p.ui.total) {
+			var tot = 0;
+			p.stakes.forEach(function (x) { tot += x; });
+			p.ui.total.wage.textContent = plain(tot);
+			if (cur.full) {
+				p.ui.total.tag.textContent = p.bets[cur.win].kind === "cover" ? "Left over wins" : p.bets[cur.win].label + " wins";
+				p.ui.total.money.textContent = plain((p.stakes[cur.win] || 0) * p.bets[cur.win].odd);
+			} else {
+				p.ui.total.tag.textContent = "click a case";
+				p.ui.total.money.textContent = "-";
+			}
+		}
+		paint(p);
+		updateSummary();
+	}
+
+	// ----- separate section: all left over teams, tick the ones to match -----
+	function chainInfo() {
+		var odd = 1, chance = 1, n = 0, names = [];
+		var seenE = {};   // a reused ender fight counts only once in the chain
+		pairs.forEach(function (p) {
+			if (p.pick === false) return;
+			var ek = p.f[p.f.length - 1];
+			if (seenE[ek]) return;
+			seenE[ek] = 1;
+			var b = p.bets[p.bets.length - 1];
+			odd *= b.odd; chance *= b.chance; n++;
+			names.push(lastG(p).outs[p.fav].name);
+		});
+		return { n: n, odd: odd, chance: chance, names: names };
+	}
+	function refreshLeft() {
+		var ch = chainInfo();
+		if (chainUI) {
+			chainUI.name.textContent = ch.n ? ch.names.join("  -  ") : "none selected";
+			chainUI.odd.textContent = ch.n ? ch.odd.toFixed(2) : "-";
+			chainUI.chance.textContent = ch.n ? pct(ch.chance) : "-";
+			chainUI.money.textContent = plain(ch.n ? chainWage * ch.odd : 0);
+		}
+		pairs.forEach(function (p) {
+			p.ui.caseRows.forEach(function (tr) { tr.hidden = p.pick === false; });
+		});
+		updateSummary();
+	}
+
+	function buildLeftSection() {
+		box.appendChild(el("h2", "", "Left over teams"));
+		box.appendChild(el("p", "pg-hint", "Tick the left over teams you want to match. Chance = fair chance of the team to win (bookmaker margin removed)."));
+
+		// select list
+		var tw = el("div", "table-wrap");
+		var tb = document.createElement("table");
+		var th = document.createElement("thead");
+		var hr = document.createElement("tr");
+		["Select", "Team", "Set", "Odd", "Chance"].forEach(function (h) { hr.appendChild(el("th", "", h)); });
+		th.appendChild(hr); tb.appendChild(th);
+		var tbd = document.createElement("tbody");
+		pairs.forEach(function (p, pi) {
+			var E = lastG(p).outs;
+			var b = p.bets[p.bets.length - 1];
+			var tr = document.createElement("tr");
+			var c0 = el("td", "");
+			var cbx = document.createElement("input");
+			cbx.type = "checkbox"; cbx.checked = p.pick !== false; cbx.className = "cb-chk";
+			cbx.onchange = function () { p.pick = cbx.checked; refreshLeft(); };
+			c0.appendChild(cbx); tr.appendChild(c0);
+			var c1 = el("td", "");
+			flagInto(c1, E[p.fav].lang);
+			c1.appendChild(document.createTextNode(E[p.fav].name));
+			tr.appendChild(c1);
+			tr.appendChild(el("td", "", String(pi + 1)));
+			tr.appendChild(el("td", "", String(b.odd)));
+			tr.appendChild(el("td", "", pct(b.chance)));
+			tbd.appendChild(tr);
+		});
+		tb.appendChild(tbd); tw.appendChild(tb); box.appendChild(tw);
+
+		// chain of the ticked teams
+		box.appendChild(el("p", "cb-sub", "Matched chain of the ticked left over teams (all must win)"));
+		var tw2 = el("div", "table-wrap");
+		var t2 = document.createElement("table");
+		var h2 = document.createElement("thead");
+		var hr2 = document.createElement("tr");
+		["Chain", "Total odd", "Chance", "Wage $", "Money result"].forEach(function (h) { hr2.appendChild(el("th", "", h)); });
+		h2.appendChild(hr2); t2.appendChild(h2);
+		var b2 = document.createElement("tbody");
+		var tr2 = document.createElement("tr");
+		var n2 = el("td", ""), o2 = el("td", ""), c2 = el("td", ""), w2 = el("td", ""), m2 = el("td", "cb-money");
+		var inp = document.createElement("input");
+		inp.type = "number"; inp.min = "0"; inp.step = "any"; inp.value = chainWage; inp.className = "cb-wage";
+		inp.oninput = function () { chainWage = parseFloat(inp.value) || 0; refreshLeft(); };
+		w2.appendChild(inp);
+		[n2, o2, c2, w2, m2].forEach(function (c) { tr2.appendChild(c); });
+		b2.appendChild(tr2); t2.appendChild(b2); tw2.appendChild(t2); box.appendChild(tw2);
+		chainUI = { name: n2, odd: o2, chance: c2, money: m2 };
+
+		// what happens: set wins (left over loses) / left over wins
+		box.appendChild(el("p", "cb-sub", "What happens: a chain of the set wins and the left over loses, or the left over wins (change the wage here too)"));
+		var tw3 = el("div", "table-wrap");
+		var t3 = document.createElement("table");
+		var h3 = document.createElement("thead");
+		var hr3 = document.createElement("tr");
+		["Set", "Case (click one: it wins, the others lose)", "Chance", "Wage $", "Result", "Money result"].forEach(function (h) { hr3.appendChild(el("th", "", h)); });
+		h3.appendChild(hr3); t3.appendChild(h3);
+		var b3 = document.createElement("tbody");
+		pairs.forEach(function (p, pi) {
+			p.bets.forEach(function (b, bi) {
+				var tr = document.createElement("tr");
+				tr.className = "cb-click";
+				tr.onclick = function () { pickBet(p, bi); };
+				tr.appendChild(el("td", "", String(pi + 1)));
+				var cs = el("td", "");
+				if (b.kind === "parlay") {
+					cs.appendChild(document.createTextNode(b.label + " wins, left over loses"));
+				} else {
+					cs.appendChild(document.createTextNode(b.label + " wins (left over wins)"));
+					tr.classList.add("cb-lo");
+				}
+				tr.appendChild(cs);
+				tr.appendChild(el("td", "", pct(b.chance)));
+				var cw = el("td", ""); cw.appendChild(wageInput(p, bi)); tr.appendChild(cw);
+				var ct = el("td", "cb-tag", ""); tr.appendChild(ct);
+				var cm = el("td", "cb-money", ""); tr.appendChild(cm);
+				b3.appendChild(tr);
+				p.ui.cases.push({ el: cm, bi: bi, row: tr, tag: ct });
+				p.ui.caseRows.push(tr);
+			});
+			// total result of this set
+			var trT = document.createElement("tr");
+			trT.className = "cb-total";
+			trT.appendChild(el("td", "", String(pi + 1)));
+			trT.appendChild(el("td", "", "Total result of set " + (pi + 1)));
+			trT.appendChild(el("td", "", ""));
+			var tw1 = el("td", ""), tt1 = el("td", ""), tm1 = el("td", "cb-money");
+			trT.appendChild(tw1); trT.appendChild(tt1); trT.appendChild(tm1);
+			b3.appendChild(trT);
+			p.ui.total = { wage: tw1, tag: tt1, money: tm1 };
+			p.ui.caseRows.push(trT);
+		});
+		// all sets together
+		var trG = document.createElement("tr");
+		trG.className = "cb-total";
+		trG.appendChild(el("td", ""));
+		trG.appendChild(el("td", "", "All sets (ticked)"));
+		trG.appendChild(el("td", "", ""));
+		var gw = el("td", ""), gt = el("td", ""), gm = el("td", "cb-money");
+		trG.appendChild(gw); trG.appendChild(gt); trG.appendChild(gm);
+		b3.appendChild(trG);
+		grandUI = { wage: gw, tag: gt, money: gm };
+		t3.appendChild(b3); tw3.appendChild(t3); box.appendChild(tw3);
+	}
+
+	// ----- FINAL summary: pick N sets, only 1 of them wins. Left over wages are NOT counted here -----
+	var finBox = null, finPick = 2;
+	function setWage(p) {
+		var t = 0;
+		p.bets.forEach(function (b, bi) { if (b.kind === "parlay") t += p.stakes[bi] || 0; });
+		return t;
+	}
+	function setPays(p) {
+		var a = [];
+		p.bets.forEach(function (b, bi) { if (b.kind === "parlay") a.push((p.stakes[bi] || 0) * b.odd); });
+		return a;
+	}
+	function money(x) { return (x < 0 ? "-$" : "$") + Math.abs(x).toFixed(2); }
+	function range(a, b) { return a === b ? money(a) : money(a) + " .. " + money(b); }
+	function median(a) {
+		if (!a.length) return 0;
+		var b = a.slice().sort(function (x, y) { return x - y; });
+		var h = Math.floor(b.length / 2);
+		return b.length % 2 ? b[h] : (b[h - 1] + b[h]) / 2;
+	}
+	// any fight of a set can be the ender: put fight gi last, the others keep their order
+	function withEnder(p, gi) {
+		var arr = p.f.filter(function (x) { return x !== gi; });
+		arr.push(gi);
+		return arr;
+	}
+	// result of a set when gi is the ender (budget split equal payout)
+	function flipStats(p, gi) {
+		var t = { f: withEnder(p, gi), bud: p.bud };
+		makeBets(t);
+		split(t);
+		var inv = 0, wage = 0, backs = [];
+		t.bets.forEach(function (b, bi) {
+			inv += 1 / b.odd;
+			if (b.kind === "parlay") { wage += t.stakes[bi]; backs.push(t.stakes[bi] * b.odd); }
+		});
+		var back = inv > 0 ? p.bud / inv : 0;
+		return { gi: gi, wage: wage, back: back, med: median(backs), net: back - p.bud, chains: backs.length };
+	}
+	function applyEnder(p, gi) {
+		p.f = withEnder(p, gi);
+		reset(p);
+		renderAll();
+	}
+	function bestFlip(p) {
+		var best = null;
+		p.f.forEach(function (gi) {
+			var r = flipStats(p, gi);
+			if (!best || r.back > best.back + 1e-9) best = r;
+		});
+		return best;
+	}
+
+	function updateFinal() {
+		if (!finBox) return;
+		finBox.innerHTML = "";
+		var m = pairs.length;
+		if (!m) return;
+
+		// ---- 1. one ROW per pair: wage and back of every chain, then total wage + median ----
+		var tw = el("div", "table-wrap");
+		var tb = document.createElement("table");
+		var th = document.createElement("thead");
+		var hr = document.createElement("tr");
+		["Pair", "wage (each chain)", "back (each chain)", "Total wage", "Median back"].forEach(function (h) { hr.appendChild(el("th", "", h)); });
+		th.appendChild(hr); tb.appendChild(th);
+		var tbd = document.createElement("tbody");
+		var all = 0;
+		pairs.forEach(function (p, pi) {
+			var wages = [], backs = [], tot = 0;
+			p.bets.forEach(function (b, bi) {
+				if (b.kind !== "parlay") return;
+				var w = p.stakes[bi] || 0;
+				wages.push(w.toFixed(2)); backs.push((w * b.odd).toFixed(2)); tot += w;
+			});
+			all += tot;
+			var tr = document.createElement("tr");
+			tr.appendChild(el("td", "", String(pi + 1)));
+			tr.appendChild(el("td", "", wages.join("  \u00b7  ")));
+			tr.appendChild(el("td", "", backs.join("  \u00b7  ")));
+			var t1 = el("td", "", tot.toFixed(2)); t1.style.fontWeight = "700";
+			var t2 = el("td", "", median(backs.map(parseFloat)).toFixed(2)); t2.style.fontWeight = "700";
+			tr.appendChild(t1); tr.appendChild(t2);
+			tbd.appendChild(tr);
+		});
+		var tt = document.createElement("tr");
+		tt.className = "cb-total";
+		tt.appendChild(el("td", "", "All"));
+		tt.appendChild(el("td", "", "")); tt.appendChild(el("td", "", ""));
+		tt.appendChild(el("td", "", all.toFixed(2)));
+		tt.appendChild(el("td", "", ""));
+		tbd.appendChild(tt);
+		tb.appendChild(tbd); tw.appendChild(tb); finBox.appendChild(tw);
+
+		// ---- 2. FLIP: every fight of a pair can be the ender, show all and mark the best ----
+		finBox.appendChild(el("p", "cb-sub", "Flip: every fight of a pair can be the ender (equal payout split of the pair budget). The best flip pays the most back."));
+		var tw2 = el("div", "table-wrap");
+		var t2 = document.createElement("table");
+		var h2 = document.createElement("thead");
+		var hr2 = document.createElement("tr");
+		["Pair", "Ender", "Chains", "Total wage", "Back", "Net", ""].forEach(function (h) { hr2.appendChild(el("th", "", h)); });
+		h2.appendChild(hr2); t2.appendChild(h2);
+		var b2 = document.createElement("tbody");
+		pairs.forEach(function (p, pi) {
+			var best = bestFlip(p);
+			p.f.forEach(function (gi, k) {
+				var r = flipStats(p, gi);
+				var isCur = gi === p.f[p.f.length - 1];
+				var isBest = gi === best.gi;
+				var tr = document.createElement("tr");
+				if (isBest) tr.className = "w";
+				if (k === 0) tr.classList.add("cb-lo");
+				tr.appendChild(el("td", "", String(pi + 1)));
+				var g = groups[gi];
+				tr.appendChild(el("td", "", g.n + ". " + g.outs.map(function (o) { return o.name; }).join(" / ") + (isCur ? "  (now)" : "")));
+				tr.appendChild(el("td", "", String(r.chains)));
+				tr.appendChild(el("td", "", r.wage.toFixed(2)));
+				var bk = el("td", "", r.back.toFixed(2)); bk.style.fontWeight = "700";
+				tr.appendChild(bk);
+				tr.appendChild(el("td", r.net >= 0 ? "win" : "loss", (r.net >= 0 ? "+" : "") + r.net.toFixed(2)));
+				var tc = el("td", "");
+				if (isBest) tc.appendChild(document.createTextNode("BEST "));
+				if (!isCur) {
+					var bt = el("button", "bb-small", "Use");
+					bt.type = "button";
+					bt.onclick = function () { applyEnder(p, gi); };
+					tc.appendChild(bt);
+				}
+				tr.appendChild(tc);
+				b2.appendChild(tr);
+			});
+		});
+		t2.appendChild(b2); tw2.appendChild(t2); finBox.appendChild(tw2);
+
+		var ex = el("div", "note", "");
+		ex.appendChild(el("div", "", "Pair row: wage and back of every chain, left over is not included. Total wage = chain wages added. Median back = middle value of the back list."));
+		ex.appendChild(el("div", "", "Flip: the ender is the fight whose favorite is left over. Back = what any winning bet pays with an equal payout split. Use sets that ender and re-splits the wages (manual wage edits of that pair are reset)."));
+		finBox.appendChild(ex);
+	}
+
+	function renderAll() {
+		box.innerHTML = "";
+		sumRows = [];
+		chainUI = null;
+		grandUI = null;
+		finBox = null;
+		if (!pairs.length) {
+			box.appendChild(el("p", "pg-hint", "No sets yet. Press Auto pair all or + Add set."));
+			return;
+		}
+		pairs.forEach(function (p, pi) {
+			buildPair(p, pi);
+			box.appendChild(p.ui.root);
+		});
+
+		buildLeftSection();
+
+		// SUMMARY (last)
+		box.appendChild(el("h2", "", "Summary"));
+		var tw = el("div", "table-wrap");
+		var tb = document.createElement("table");
+		var thead = document.createElement("thead");
+		var hr = document.createElement("tr");
+		["Set", "Fights (starters / ender)", "Total wage", "Least money back", "Most money back"].forEach(function (h) {
+			hr.appendChild(el("th", "", h));
+		});
+		thead.appendChild(hr);
+		tb.appendChild(thead);
+		var tbody = document.createElement("tbody");
+		pairs.forEach(function (p, pi) {
+			var tr = document.createElement("tr");
+			tr.appendChild(el("td", "", String(pi + 1)));
+			var nums = p.f.map(function (gi) { return groups[gi].n; });
+			var en = nums.pop();
+			tr.appendChild(el("td", "", nums.join(" + ") + " / " + en));
+			var a = el("td", "", ""), b = el("td", "", ""), c = el("td", "", "");
+			tr.appendChild(a); tr.appendChild(b); tr.appendChild(c);
+			tbody.appendChild(tr);
+			sumRows[pi] = { total: a, min: b, max: c };
+		});
+		var trc = document.createElement("tr");
+		trc.appendChild(el("td", "", "+"));
+		var cn = el("td", "", "");
+		var ca = el("td", "", ""), cb2 = el("td", "", ""), cc = el("td", "", "");
+		[cn, ca, cb2, cc].forEach(function (c) { trc.appendChild(c); });
+		tbody.appendChild(trc);
+		sumRows.chain = { name: cn, total: ca, min: cb2, max: cc };
+		var trAll = document.createElement("tr");
+		trAll.appendChild(el("td", "", ""));
+		trAll.appendChild(el("td", "", "All wages together"));
+		var allC = el("td", "", "");
+		allC.style.fontWeight = "700";
+		trAll.appendChild(allC);
+		trAll.appendChild(el("td", "", ""));
+		trAll.appendChild(el("td", "", ""));
+		tbody.appendChild(trAll);
+		sumRows.all = allC;
+		tb.appendChild(tbody);
+		tw.appendChild(tb);
+		box.appendChild(tw);
+
+		var ex = el("div", "note", "");
+		ex.appendChild(el("div", "", "Total wage: all the money you put on that set."));
+		ex.appendChild(el("div", "", "Least money back: the smallest amount you get back over every possible result of the fights of the set (worst case). If it is lower than the total wage, that result loses money."));
+		ex.appendChild(el("div", "", "Most money back: the biggest amount you get back (best case), when the best paying bet wins."));
+		box.appendChild(ex);
+
+		// FINAL summary
+		box.appendChild(el("h2", "", "Final summary"));
+		finBox = el("div", "");
+		box.appendChild(finBox);
+
+		var used = {};
+		pairs.forEach(function (p) { p.f.forEach(function (gi) { used[gi] = 1; }); });
+		var free = [];
+		groups.forEach(function (g, gi) {
+			if (!used[gi]) free.push(g.n + ": " + g.outs.map(function (o) { return o.name + " " + o.odd; }).join(" | "));
+		});
+		if (free.length) box.appendChild(el("p", "pg-hint", "Not used: " + free.join("   ;   ")));
+
+		pairs.forEach(function (p) { update(p); });
+		refreshLeft();
+	}
+
+	function show() {
+		say("");
+		var err = readGroups();
+		if (err) { box.innerHTML = ""; say(err); return; }
+		var s = JSON.stringify(groups);
+		if (s !== sig) { sig = s; autoPairs(); }
+		renderAll();
+	}
+
+	document.getElementById("cb-auto").onclick = function () {
+		say("");
+		if (readGroups()) { say("Need at least 2 fights."); return; }
+		sig = JSON.stringify(groups);
+		autoPairs();
+		renderAll();
+	};
+	document.getElementById("cb-add").onclick = function () {
+		say("");
+		if (readGroups()) { say("Need at least 2 fights."); return; }
+		var k = kCount();
+		var used = {};
+		pairs.forEach(function (p) { p.f.forEach(function (gi) { used[gi] = 1; }); });
+		var free = byRatio().filter(function (gi) { return !used[gi]; });
+		var pool = free.length >= k ? free : byRatio();   // not enough free fights: reuse
+		var arr = pool.slice(0, k - 1);
+		arr.push(pool[pool.length - 1]);
+		pairs.push(newPair(arr));
+		renderAll();
+	};
+	// reuse: fights may appear in many sets. Adds the best new combinations below the existing sets.
+	function setKey(arr) {
+		var st = arr.slice(0, arr.length - 1).sort(function (a, b) { return a - b; });
+		return st.join(",") + "|" + arr[arr.length - 1];
+	}
+	document.getElementById("cb-reuse").onclick = function () {
+		say("");
+		if (readGroups()) { say("Need at least 2 fights."); return; }
+		if (!pairs.length) { sig = JSON.stringify(groups); autoPairs(); }
+		var k = kCount(), N = groups.length;
+		var want = Math.max(1, Math.min(50, parseInt(document.getElementById("cb-extra").value, 10) || 6));
+		var have = {};
+		pairs.forEach(function (p) { have[setKey(p.f)] = 1; });
+		var rt = groups.map(ratio);
+
+		// every (starters, ender) combination: close starters + far ender = best score
+		var cands = [];
+		var st = [];
+		(function rec(start) {
+			if (st.length === k - 1) {
+				var sr = 0;
+				st.forEach(function (i) { sr += rt[i]; });
+				for (var e = 0; e < N; e++) {
+					if (st.indexOf(e) >= 0) continue;
+					var arr = st.slice(); arr.push(e);
+					if (have[setKey(arr)]) continue;
+					cands.push({ f: arr, score: sr / (k - 1) - rt[e] });
+				}
+				return;
+			}
+			for (var i = start; i < N; i++) { st.push(i); rec(i + 1); st.pop(); }
+		})(0);
+		cands.sort(function (a, b) { return a.score - b.score; });
+
+		var add = cands.slice(0, want);
+		if (!add.length) { say("No new combination left."); return; }
+		add.forEach(function (c) {
+			var p = newPair(c.f);
+			p.extra = true;
+			pairs.push(p);
+		});
+		say("Added " + add.length + " sets that reuse fights" + (cands.length > add.length ? " (" + (cands.length - add.length) + " more possible)." : " (all combinations used)."));
+		renderAll();
+	};
+	document.getElementById("cb-split").onclick = function () {
+		if (!pairs.length) return;
+		var each = (parseFloat(totalEl.value) || 0) / pairs.length;
+		pairs.forEach(function (p) { p.bud = each; split(p); });
+		renderAll();
+	};
+	// changing the number of fights per set rebuilds the sets
+	kEl.onchange = function () {
+		say("");
+		if (readGroups()) return;
+		sig = JSON.stringify(groups);
+		autoPairs();
+		renderAll();
+	};
+
+	document.querySelector('[data-panel="cover"]').addEventListener("keydown", function (e) {
+		if (e.key === "Enter") e.preventDefault();
+	});
+	document.querySelector('.bb-tab[data-tab="cover"]').addEventListener("click", show);
+})();
 			</script>
 		</body>
 	</html>
